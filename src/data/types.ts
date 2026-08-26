@@ -60,6 +60,8 @@ export interface Commentary {
   publishedAt: string;
   /** Link to the official publication, if available */
   sourceUrl?: string;
+  /** Class of source — drives visual separation (Devesh: no blurring between source classes) */
+  sourceType?: 'law-firm' | 'big4' | 'industry-body';
   /** Which clause this commentary addresses */
   clauseRef: string;
   /** The commentary text */

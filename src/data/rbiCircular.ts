@@ -182,6 +182,7 @@ export const rbiComplianceDirections: Circular = {
   commentary: [
     {
       id: 'COM-RBI-1',
+      sourceType: 'industry-body',
       author: 'ICSI (Institute of Company Secretaries of India)',
       publishedAt: '15 Aug 2026',
       clauseRef: 'Paras 61, 67',
@@ -190,6 +191,7 @@ export const rbiComplianceDirections: Circular = {
     },
     {
       id: 'COM-RBI-2',
+      sourceType: 'law-firm',
       author: 'Cyril Amarchand Mangaldas',
       publishedAt: '05 Aug 2026',
       clauseRef: 'Para 70',
@@ -198,6 +200,7 @@ export const rbiComplianceDirections: Circular = {
     },
     {
       id: 'COM-RBI-3',
+      sourceType: 'big4',
       author: 'PwC India',
       publishedAt: '20 Aug 2026',
       clauseRef: 'Para 74',
@@ -206,10 +209,20 @@ export const rbiComplianceDirections: Circular = {
     },
     {
       id: 'COM-RBI-4',
+      sourceType: 'law-firm',
       author: 'Shardul Amarchand Mangaldas',
       publishedAt: '12 Aug 2026',
       clauseRef: 'Para 10',
       text: 'The requirement to keep Compliance and Internal Audit separate is a structural governance mandate, not a physical-office requirement. Banks should reflect the separation in reporting lines, functional charters, and freedom from business conflicts — the Direction does not compel separate teams or locations.',
+      official: true,
+    },
+    {
+      id: 'COM-RBI-5',
+      sourceType: 'industry-body',
+      author: 'FACE (Fintech Convergence Council)',
+      publishedAt: 'Sep 2026 monthly journal',
+      clauseRef: 'Para 70',
+      text: 'Member practice note: fintechs report that RBI regional offices expect Para 70 intimation not only for fresh appointments but also for renewals and tenure extensions. FACE recommends members treat any change to the sitting CCO\u2019s tenure as intimation-triggering, and calendar the filing two months ahead of board action.',
       official: true,
     },
   ],

@@ -9,7 +9,8 @@ import { Card, Badge } from '../components/ui';
  * attributed analysis would appear. Nothing here is a real partner publication.
  */
 export function CommentarySection({ circular: c }: { circular: Circular }) {
-  const official = c.commentary.filter((x) => x.official);
+  const industryBodies = c.commentary.filter((x) => x.official && x.sourceType === 'industry-body');
+  const firms = c.commentary.filter((x) => x.official && x.sourceType !== 'industry-body');
   const community = c.commentary.filter((x) => !x.official);
 
   return (
@@ -36,7 +37,7 @@ export function CommentarySection({ circular: c }: { circular: Circular }) {
         </div>
       </div>
 
-      {official.length === 0 && community.length === 0 && (
+      {industryBodies.length === 0 && firms.length === 0 && community.length === 0 && (
         <Card>
           <div className="p-5 text-[13px] text-on-surface-variant">
             No partner commentary available for this circular yet.
@@ -44,13 +45,33 @@ export function CommentarySection({ circular: c }: { circular: Circular }) {
         </Card>
       )}
 
-      {official.length > 0 && (
+      {/* Industry-body clarifications — the FACE member-benefit channel */}
+      {industryBodies.length > 0 && (
+        <div className="space-y-3">
+          <div className="flex items-center justify-between gap-3 flex-wrap">
+            <p className="text-[11px] font-semibold uppercase tracking-wider text-on-surface-variant">
+              Industry-body clarifications — monthly journals, injected &amp; attributed
+            </p>
+            <span className="text-[11px] text-on-surface-variant inline-flex items-center gap-1">
+              <span className="material-symbols-outlined text-[13px]">card_membership</span>
+              distributed to members as a benefit — free to read here
+            </span>
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            {industryBodies.map((co) => (
+              <CommentaryCard key={co.id} id={co.id} circular={c} />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {firms.length > 0 && (
         <div className="space-y-3">
           <p className="text-[11px] font-semibold uppercase tracking-wider text-on-surface-variant">
-            Official partner commentary
+            Official partner commentary — law firms &amp; Big 4
           </p>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            {official.map((co) => (
+            {firms.map((co) => (
               <CommentaryCard key={co.id} id={co.id} circular={c} />
             ))}
           </div>
@@ -75,14 +96,23 @@ export function CommentarySection({ circular: c }: { circular: Circular }) {
 
 function CommentaryCard({ id, circular: c }: { id: string; circular: Circular }) {
   const co = c.commentary.find((x) => x.id === id)!;
+  const SOURCE_BADGE = {
+    'law-firm': { label: 'Law firm', tone: 'primary' as const },
+    big4: { label: 'Big 4', tone: 'secondary' as const },
+    'industry-body': { label: 'Industry body', tone: 'tertiary' as const },
+  } as const;
+  const sb = co.sourceType ? SOURCE_BADGE[co.sourceType] : null;
   return (
-    <Card className={co.official ? 'border-l-4 border-l-primary' : ''}>
+    <Card className={co.official ? (co.sourceType === 'industry-body' ? 'border-l-4 border-l-tertiary' : 'border-l-4 border-l-primary') : ''}>
       <div className="p-5">
         <div className="flex items-center justify-between gap-3 mb-3 flex-wrap">
           <div className="flex items-center gap-2 min-w-0">
-            <span className="material-symbols-outlined text-primary text-lg">person</span>
+            <span className={`material-symbols-outlined text-lg ${co.sourceType === 'industry-body' ? 'text-tertiary' : 'text-primary'}`}>
+              {co.sourceType === 'industry-body' ? 'groups' : 'person'}
+            </span>
             <span className="text-[14px] font-semibold truncate">{co.author}</span>
             {co.official ? <Badge tone="primary">Official</Badge> : <Badge tone="neutral">Community</Badge>}
+            {sb && <Badge tone={sb.tone}>{sb.label}</Badge>}
           </div>
           <div className="flex items-center gap-3 text-[11px] text-on-surface-variant shrink-0">
             <span className="font-mono">{co.clauseRef}</span>

@@ -135,6 +135,7 @@ export const sebiSIDCircular: Circular = {
   commentary: [
     {
       id: 'COM-SEBI-1',
+      sourceType: 'industry-body',
       author: 'AMFI',
       publishedAt: '15 Jan 2025',
       sourceUrl: 'https://www.amfiindia.com',
@@ -144,6 +145,7 @@ export const sebiSIDCircular: Circular = {
     },
     {
       id: 'COM-SEBI-2',
+      sourceType: 'law-firm',
       author: 'AZB & Partners',
       publishedAt: '22 Jan 2025',
       clauseRef: 'Circular 2024/179',
@@ -152,6 +154,7 @@ export const sebiSIDCircular: Circular = {
     },
     {
       id: 'COM-SEBI-3',
+      sourceType: 'big4',
       author: 'Deloitte India',
       publishedAt: '10 Feb 2025',
       clauseRef: 'Para 10',
