@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import type { Circular } from '../data/types';
 import { ChangeTab } from '../tabs/ChangeTab';
 import { CircularReaderTab } from '../tabs/CircularReaderTab';
@@ -6,7 +5,7 @@ import { TraceabilityTab } from '../tabs/TraceabilityTab';
 import { OverviewTab } from '../tabs/OverviewTab';
 import { ChecklistTab } from '../tabs/ChecklistTab';
 
-type AnalysisTab = 'change' | 'overview' | 'reader' | 'trace' | 'checklist';
+export type AnalysisTab = 'change' | 'overview' | 'reader' | 'trace' | 'checklist';
 
 const TABS: { id: AnalysisTab; label: string; icon: string }[] = [
   { id: 'change', label: 'What Changed', icon: 'difference' },
@@ -21,9 +20,18 @@ const TABS: { id: AnalysisTab; label: string; icon: string }[] = [
  * tab bar (not top-level navigation). What Changed is the default lens: the
  * #1 question a compliance reader asks is "what must I now do differently."
  * The other lenses are overview, the raw source text, and the lineage proof.
+ * Tab state is controlled from App so search results can deep-link into a lens.
  */
-export function AnalysisPane({ circular: c }: { circular: Circular }) {
-  const [tab, setTab] = useState<AnalysisTab>('change');
+export function AnalysisPane({
+  circular: c,
+  tab,
+  onTabChange,
+}: {
+  circular: Circular;
+  tab: AnalysisTab;
+  onTabChange: (t: AnalysisTab) => void;
+}) {
+  const setTab = onTabChange;
 
   return (
     <section className="rounded-xl border border-outline-variant/20 bg-surface-container-lowest shadow-sm overflow-hidden">

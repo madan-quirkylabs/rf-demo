@@ -6,6 +6,8 @@ import { AnalysisPane } from './sections/AnalysisPane';
 import { PersonalizeBar } from './sections/PersonalizeBar';
 import { CommentarySection } from './sections/CommentarySection';
 import { ClarificationsSection } from './sections/ClarificationsSection';
+import { SearchBar } from './components/SearchBar';
+import type { AnalysisTab } from './sections/AnalysisPane';
 
 const EMPTY_PROFILE: ReaderProfile = {
   regulated: null,
@@ -15,6 +17,7 @@ const EMPTY_PROFILE: ReaderProfile = {
 
 export default function App() {
   const [circularId, setCircularId] = useState<string>(circulars[0].id);
+  const [tab, setTab] = useState<AnalysisTab>('change');
   const [profile, setProfile] = useState<ReaderProfile>(EMPTY_PROFILE);
   const c: Circular = circulars.find((x) => x.id === circularId) ?? circulars[0];
 
@@ -32,8 +35,14 @@ export default function App() {
           </div>
         </div>
 
-        {/* Free / no-login signal */}
-        <div className="flex items-center gap-2">
+        {/* Free / no-login signal + global search */}
+        <div className="flex items-center gap-2 flex-wrap">
+          <SearchBar
+            onSelect={(cid, t) => {
+              setCircularId(cid);
+              setTab(t);
+            }}
+          />
           <span className="inline-flex items-center gap-1 text-[11px] font-medium text-primary bg-primary/10 border border-primary/20 px-2 py-1 rounded-full">
             <span className="material-symbols-outlined text-[13px]">lock_open</span>
             Full value · no account needed
@@ -66,7 +75,7 @@ export default function App() {
           onChange={setProfile}
           onSelectCircular={setCircularId}
         />
-        <AnalysisPane circular={c} />
+        <AnalysisPane circular={c} tab={tab} onTabChange={setTab} />
         <CommentarySection circular={c} />
         <ClarificationsSection circular={c} />
       </div>
