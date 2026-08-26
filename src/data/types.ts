@@ -87,6 +87,53 @@ export interface Clarification {
   };
 }
 
+/**
+ * Checklist categories — the practitioner taxonomy (6-header model) a
+ * compliance officer uses to triage a circular into their working world.
+ */
+export type ChecklistCategory =
+  | 'reporting'
+  | 'event'
+  | 'actionable'
+  | 'policy'
+  | 'appointments'
+  | 'info';
+
+/** When the item comes due. `none` = ongoing obligation with no fixed date. */
+export type ChecklistDeadline =
+  | { kind: 'periodic'; frequency: string }
+  | { kind: 'event'; trigger: string; leadTime?: string }
+  | { kind: 'fixed'; date: string }
+  | { kind: 'none'; note: string };
+
+/**
+ * One row of the auto-derived compliance checklist for a circular.
+ * Deliberately general — "what this instrument requires of regulated entities",
+ * never any specific company's tracking state.
+ */
+export interface ChecklistItem {
+  id: string;
+  /** Published reference, e.g. "Para 74(5)" */
+  ref: string;
+  /** Parent section heading — context Devesh requires on every clause view */
+  section?: string;
+  /** Action-oriented restatement of what the clause requires */
+  action: string;
+  /** Which regulated-entity categories from the instrument's applicability this lands on */
+  appliesTo: string[];
+  category: ChecklistCategory;
+  deadline: ChecklistDeadline;
+  /** The generic proof a regulator / auditor expects against this item (not company state) */
+  evidenceExpected: string;
+}
+
+/** Anonymous reader profile from the no-signup applicability questionnaire. */
+export interface ReaderProfile {
+  regulated: 'yes' | 'no' | null;
+  licenses: string[];
+  worksWithRegulatedEntities: boolean | null;
+}
+
 export interface Circular {
   id: string;
   /** Title as published */
@@ -110,6 +157,8 @@ export interface Circular {
   commentary: Commentary[];
   /** Community clarification questions with optional AI answers */
   clarifications: Clarification[];
+  /** Clause-by-clause compliance checklist auto-derived from the instrument */
+  checklist: ChecklistItem[];
   /** The clause-level change this demo proves is traceable (the "diff, not a summary"). */
   keyChange: {
     headline: string;

@@ -4,14 +4,16 @@ import { ChangeTab } from '../tabs/ChangeTab';
 import { CircularReaderTab } from '../tabs/CircularReaderTab';
 import { TraceabilityTab } from '../tabs/TraceabilityTab';
 import { OverviewTab } from '../tabs/OverviewTab';
+import { ChecklistTab } from '../tabs/ChecklistTab';
 
-type AnalysisTab = 'change' | 'overview' | 'reader' | 'trace';
+type AnalysisTab = 'change' | 'overview' | 'reader' | 'trace' | 'checklist';
 
 const TABS: { id: AnalysisTab; label: string; icon: string }[] = [
   { id: 'change', label: 'What Changed', icon: 'difference' },
   { id: 'overview', label: 'Overview', icon: 'description' },
   { id: 'reader', label: 'Circular Reader', icon: 'menu_book' },
   { id: 'trace', label: 'Traceability', icon: 'account_tree' },
+  { id: 'checklist', label: 'Compliance Checklist', icon: 'checklist' },
 ];
 
 /**
@@ -49,6 +51,7 @@ export function AnalysisPane({ circular: c }: { circular: Circular }) {
         {tab === 'overview' && <OverviewTab circular={c} />}
         {tab === 'reader' && <CircularReaderTab key={c.id} circular={c} />}
         {tab === 'trace' && <TraceabilityTab circular={c} />}
+        {tab === 'checklist' && <ChecklistTab key={c.id} circular={c} />}
       </div>
     </section>
   );

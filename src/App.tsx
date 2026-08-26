@@ -1,13 +1,21 @@
 import { useState } from 'react';
 import { circulars } from './data';
-import type { Circular } from './data/types';
+import type { Circular, ReaderProfile } from './data/types';
 import { HeroSection } from './sections/HeroSection';
 import { AnalysisPane } from './sections/AnalysisPane';
+import { PersonalizeBar } from './sections/PersonalizeBar';
 import { CommentarySection } from './sections/CommentarySection';
 import { ClarificationsSection } from './sections/ClarificationsSection';
 
+const EMPTY_PROFILE: ReaderProfile = {
+  regulated: null,
+  licenses: [],
+  worksWithRegulatedEntities: null,
+};
+
 export default function App() {
   const [circularId, setCircularId] = useState<string>(circulars[0].id);
+  const [profile, setProfile] = useState<ReaderProfile>(EMPTY_PROFILE);
   const c: Circular = circulars.find((x) => x.id === circularId) ?? circulars[0];
 
   return (
@@ -24,9 +32,14 @@ export default function App() {
           </div>
         </div>
 
-        {/* Regulator / circular selector */}
-        <div className="flex items-center gap-1 bg-surface-container-low rounded-lg p-1 flex-wrap">
-          {circulars.map((x) => (
+        {/* Free / no-login signal */}
+        <div className="flex items-center gap-2">
+          <span className="inline-flex items-center gap-1 text-[11px] font-medium text-primary bg-primary/10 border border-primary/20 px-2 py-1 rounded-full">
+            <span className="material-symbols-outlined text-[13px]">lock_open</span>
+            Full value · no account needed
+          </span>
+          <div className="flex items-center gap-1 bg-surface-container-low rounded-lg p-1 flex-wrap">
+            {circulars.map((x) => (
             <button
               key={x.id}
               onClick={() => setCircularId(x.id)}
@@ -40,12 +53,19 @@ export default function App() {
               <span className="hidden xl:inline"> · {x.dated}</span>
             </button>
           ))}
+          </div>
         </div>
       </header>
 
-      {/* Single-page flow: applicability + summary → analysis → commentary → clarifications */}
+      {/* Single-page flow: applicability + summary → personalize → analysis (incl. checklist) → commentary → clarifications */}
       <div className="px-8 py-6 max-w-[1440px] w-full mx-auto space-y-8">
         <HeroSection circular={c} />
+        <PersonalizeBar
+          circulars={circulars}
+          profile={profile}
+          onChange={setProfile}
+          onSelectCircular={setCircularId}
+        />
         <AnalysisPane circular={c} />
         <CommentarySection circular={c} />
         <ClarificationsSection circular={c} />
