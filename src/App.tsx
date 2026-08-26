@@ -7,6 +7,7 @@ import { PersonalizeBar } from './sections/PersonalizeBar';
 import { CommentarySection } from './sections/CommentarySection';
 import { ClarificationsSection } from './sections/ClarificationsSection';
 import { SearchBar } from './components/SearchBar';
+import { PreScreen } from './components/PreScreen';
 import type { AnalysisTab } from './sections/AnalysisPane';
 
 const EMPTY_PROFILE: ReaderProfile = {
@@ -74,6 +75,12 @@ export default function App() {
           profile={profile}
           onChange={setProfile}
           onSelectCircular={setCircularId}
+        />
+        <PreScreen
+          onSelect={(cid, t) => {
+            setCircularId(cid);
+            setTab(t);
+          }}
         />
         <AnalysisPane circular={c} tab={tab} onTabChange={setTab} />
         <CommentarySection circular={c} />
