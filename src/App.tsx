@@ -8,6 +8,7 @@ import { CommentarySection } from './sections/CommentarySection';
 import { ClarificationsSection } from './sections/ClarificationsSection';
 import { SearchBar } from './components/SearchBar';
 import { PreScreen } from './components/PreScreen';
+import { DigestRail } from './components/DigestRail';
 import type { AnalysisTab } from './sections/AnalysisPane';
 
 const EMPTY_PROFILE: ReaderProfile = {
@@ -70,6 +71,7 @@ export default function App() {
       {/* Single-page flow: applicability + summary → personalize → analysis (incl. checklist) → commentary → clarifications */}
       <div className="px-8 py-6 max-w-[1440px] w-full mx-auto space-y-8">
         <HeroSection circular={c} />
+        <DigestRail circulars={circulars} activeId={circularId} onSelect={setCircularId} />
         <PersonalizeBar
           circulars={circulars}
           profile={profile}
