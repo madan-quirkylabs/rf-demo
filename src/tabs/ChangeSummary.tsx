@@ -1,5 +1,5 @@
 import type { Circular } from '../data/types';
-import { Card, CardHeader, Pill } from '../components/ui';
+import { Card, CardHeader } from '../components/ui';
 
 /**
  * ChangeSummary — the high-level diff: previous vs. new requirement at the
@@ -42,25 +42,6 @@ export function ChangeSummary({ circular: c }: { circular: Circular }) {
                 </li>
               ))}
             </ul>
-          </div>
-        </div>
-      </Card>
-
-      {/* Key change callout */}
-      <Card className="border-l-4 border-l-tertiary">
-        <div className="p-5 flex items-start gap-3">
-          <span className="material-symbols-outlined text-tertiary mt-0.5">warning</span>
-          <div>
-            <p className="text-[12px] font-semibold uppercase tracking-wider text-tertiary mb-1">
-              Key change
-            </p>
-            <p className="text-[14px] leading-relaxed">{c.keyChange.detail}</p>
-            <div className="mt-3">
-              <Pill>
-                <span className="material-symbols-outlined text-[12px] text-primary">link</span>
-                {c.current.interpretationBasis[0].source} · {c.current.interpretationBasis[0].clause}
-              </Pill>
-            </div>
           </div>
         </div>
       </Card>
