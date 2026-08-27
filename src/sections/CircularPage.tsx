@@ -5,6 +5,7 @@ import { CommentarySection } from './CommentarySection';
 import { ClarificationsSection } from './ClarificationsSection';
 import { SplitReader } from '../tabs/SplitReader';
 import { ChangeSummary } from '../tabs/ChangeSummary';
+import { PartnerCommentary } from '../tabs/PartnerCommentary';
 import type { CircularLens } from './IndexPage';
 
 type TopTab = 'circular' | 'clarify';
@@ -34,6 +35,8 @@ export function CircularPage({
     initialLens === 'clarify' ? 'clarify' : 'circular'
   );
   const [lens, setLens] = useState<Lens>('read');
+  /** Para ref to focus in Read circular after a jump from commentary. */
+  const [readFocus, setReadFocus] = useState<string | undefined>(undefined);
 
   return (
     <div className="px-8 py-6 max-w-[1440px] w-full mx-auto space-y-6">
@@ -99,11 +102,19 @@ export function CircularPage({
               ))}
             </div>
             <div className="px-2 pb-2">
-              {lens === 'read' && <SplitReader key={`read-${c.id}`} circular={c} />}
+              {lens === 'read' && (
+                <SplitReader key={`read-${c.id}-${readFocus ?? ''}`} circular={c} focusRef={readFocus} />
+              )}
               {lens === 'highlights' && (
                 <div key={`hi-${c.id}`}>
                   <ChangeSummary circular={c} />
-                  <SplitReader circular={c} highlightsOnly />
+                  <PartnerCommentary
+                    circular={c}
+                    onOpenPara={(ref) => {
+                      setReadFocus(ref);
+                      setLens('read');
+                    }}
+                  />
                 </div>
               )}
             </div>

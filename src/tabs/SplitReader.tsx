@@ -55,17 +55,18 @@ function DiffText({ text, previous }: { text: string; previous?: string }) {
  */
 export function SplitReader({
   circular: c,
-  highlightsOnly = false,
+  focusRef,
 }: {
   circular: Circular;
-  /** Highlights mode: only paras that moved, with partner commentary attached. */
-  highlightsOnly?: boolean;
+  /** Para ref to preselect (used when jumping in from commentary). */
+  focusRef?: string;
 }) {
-  const clauses = useMemo(
-    () => (highlightsOnly ? c.clauses.filter((cl) => cl.changeType !== 'unchanged') : c.clauses),
-    [c, highlightsOnly]
+  const clauses = c.clauses;
+  const [selectedId, setSelectedId] = useState<string>(
+    (focusRef && clauses.find((cl) => baseRef(cl.ref) === baseRef(focusRef))?.id) ||
+      clauses[0]?.id ||
+      ''
   );
-  const [selectedId, setSelectedId] = useState<string>(clauses[0]?.id ?? '');
   const selected = clauses.find((cl) => cl.id === selectedId) ?? clauses[0];
   const paraChecklist = selected
     ? c.checklist.filter((i) => baseRef(i.ref) === baseRef(selected.ref))
@@ -132,9 +133,7 @@ export function SplitReader({
           <span className="ml-auto flex items-center gap-3">
           <span className="text-[11px] text-on-surface-variant inline-flex items-center gap-1">
             <span className="material-symbols-outlined text-[14px]">verified</span>
-            {highlightsOnly
-              ? `${clauses.length} of ${c.clauses.length} paras moved — see all in Read circular`
-              : `${clauses.length} paras · all shown · verbatim from source`}
+            {clauses.length} paras · all shown · verbatim from source
           </span>
           <button
             onClick={downloadExcel}
