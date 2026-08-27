@@ -1,4 +1,5 @@
 import type { Circular } from './types';
+import { completeParas } from './completeParas';
 
 /**
  * DEMO DATA — RBI Compliance Function Directions, 2026 (Commercial Banks).
@@ -121,7 +122,8 @@ export const rbiComplianceDirections: Circular = {
       source: 'RBI Directions 2026',
     },
   ],
-  clauses: [
+  clauses: completeParas(
+    [
     {
       id: 'RBI-7',
       ref: 'Para 7',
@@ -181,6 +183,16 @@ export const rbiComplianceDirections: Circular = {
       obligationIds: ['OBL-R6'],
     },
   ],
+    [
+      { from: 1, to: 6, section: 'Application and Scope' },
+      { from: 7, to: 14, section: 'Governance and Oversight — Role of the Board' },
+      { from: 15, to: 30, section: 'Compliance Function — Structure and Placement' },
+      { from: 31, to: 60, section: 'Compliance Function — Roles and Responsibilities' },
+      { from: 61, to: 72, section: 'Chief Compliance Officer — Authority, Stature, and Independence' },
+      { from: 73, to: 76, section: 'Use of Technology for Monitoring and Repeal Provisions' },
+    ],
+    'RBI-F'
+  ),
   commentary: [
     {
       id: 'COM-RBI-1',

@@ -5,14 +5,12 @@ import { CommentarySection } from './CommentarySection';
 import { ClarificationsSection } from './ClarificationsSection';
 import { ChangeTab } from '../tabs/ChangeTab';
 import { SplitReader } from '../tabs/SplitReader';
-import { ChecklistTab } from '../tabs/ChecklistTab';
 import type { CircularLens } from './IndexPage';
 
 type TopTab = 'circular' | 'clarify';
-type Lens = Exclude<CircularLens, 'clarify'> | 'change';
+type Lens = 'read' | 'change';
 
 const LENSES: { id: Lens; label: string; icon: string }[] = [
-  { id: 'checklist', label: 'Checklist', icon: 'checklist' },
   { id: 'read', label: 'Read circular', icon: 'menu_book' },
   { id: 'change', label: 'What Changed', icon: 'difference' },
 ];
@@ -26,7 +24,7 @@ const LENSES: { id: Lens; label: string; icon: string }[] = [
 export function CircularPage({
   circular: c,
   onBack,
-  initialLens = 'checklist',
+  initialLens = 'read',
 }: {
   circular: Circular;
   onBack: () => void;
@@ -35,9 +33,7 @@ export function CircularPage({
   const [tab, setTab] = useState<TopTab>(
     initialLens === 'clarify' ? 'clarify' : 'circular'
   );
-  const [lens, setLens] = useState<Lens>(
-    initialLens === 'clarify' ? 'checklist' : (initialLens as Lens)
-  );
+  const [lens, setLens] = useState<Lens>('read');
 
   return (
     <div className="px-8 py-6 max-w-[1440px] w-full mx-auto space-y-6">
@@ -103,7 +99,6 @@ export function CircularPage({
               ))}
             </div>
             <div className="px-2 pb-2">
-              {lens === 'checklist' && <ChecklistTab key={c.id} circular={c} />}
               {lens === 'read' && <SplitReader key={c.id} circular={c} />}
               {lens === 'change' && <ChangeTab circular={c} />}
             </div>

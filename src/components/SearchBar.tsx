@@ -12,7 +12,7 @@ interface Hit {
   title: string;
   snippet: string;
   /** Which lens of the circular page surfaces this content */
-  tab: 'checklist' | 'read' | 'clarify';
+  tab: 'read' | 'clarify';
 }
 
 const KIND_META: Record<HitKind, { label: string; icon: string }> = {
@@ -45,7 +45,7 @@ function buildIndex(): Hit[] {
         ref: ck.ref,
         title: ck.action,
         snippet: ck.evidenceExpected,
-        tab: 'checklist',
+        tab: 'read',
       });
     }
     for (const com of c.commentary) {

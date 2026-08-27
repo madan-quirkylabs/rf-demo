@@ -1,4 +1,5 @@
 import type { Circular } from './types';
+import { completeParas } from './completeParas';
 
 /**
  * DEMO DATA — SEBI SID / offer-document simplification.
@@ -103,7 +104,7 @@ export const sebiSIDCircular: Circular = {
       source: 'mfdcir0508 (2008, as updated)',
     },
   ],
-  clauses: [
+  clauses: completeParas([
     {
       id: 'SEBI-10.1',
       ref: 'Para 10.1',
@@ -132,6 +133,12 @@ export const sebiSIDCircular: Circular = {
       obligationIds: ['OBL-4'],
     },
   ],
+    [
+      { from: 1, to: 8, section: 'Preamble and Application' },
+      { from: 9, to: 14, section: 'Offer Document — Scheme Information Document' },
+    ],
+    'SEBI-F'
+  ),
   commentary: [
     {
       id: 'COM-SEBI-1',

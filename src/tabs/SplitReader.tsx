@@ -1,6 +1,15 @@
 import { useMemo, useState } from 'react';
 import type { ChangeType, Circular, SourceClause } from '../data/types';
 
+const CATEGORY_LABEL: Record<string, string> = {
+  reporting: 'Reporting',
+  event: 'Event-based',
+  actionable: 'Actionable',
+  policy: 'Policy & Process',
+  appointments: 'Key Appointments',
+  info: 'Information-only',
+};
+
 const CHANGE_META: Record<ChangeType, { label: string; chip: string }> = {
   new: { label: 'New', chip: 'bg-primary/10 text-primary border-primary/20' },
   amended: { label: 'Amended', chip: 'bg-tertiary/10 text-tertiary border-tertiary/20' },
@@ -51,6 +60,45 @@ export function SplitReader({ circular: c }: { circular: Circular }) {
     ? c.checklist.filter((i) => baseRef(i.ref) === baseRef(selected.ref))
     : [];
 
+  /** The finale: the full checklist, clause-by-clause, verbatim included. */
+  const downloadExcel = () => {
+    const esc = (v: string) => `"${v.replace(/"/g, '""')}"`;
+    const clauseText = (ref: string) =>
+      c.clauses.find((cl) => baseRef(cl.ref) === baseRef(ref))?.text ?? '';
+    const deadline = (d: (typeof c.checklist)[number]['deadline']) =>
+      d.kind === 'periodic'
+        ? `Recurring — ${d.frequency}`
+        : d.kind === 'event'
+          ? `Event-based — ${d.trigger}`
+          : d.kind === 'fixed'
+            ? `By ${d.date}`
+            : d.note;
+    const lines = [
+      ['Para', 'Circular Text (verbatim)', 'Category', 'Action Item', 'Applies To', 'Deadline', 'Expected Evidence']
+        .map(esc)
+        .join(','),
+      ...c.checklist.map((i) =>
+        [
+          i.ref,
+          clauseText(i.ref),
+          CATEGORY_LABEL[i.category] ?? i.category,
+          i.action,
+          i.appliesTo.join('; '),
+          deadline(i.deadline),
+          i.evidenceExpected,
+        ]
+          .map((v) => esc(String(v)))
+          .join(',')
+      ),
+    ];
+    const blob = new Blob([lines.join('\n')], { type: 'text/csv;charset=utf-8;' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `RF_Checklist_${c.regulator}_${c.refNo.replace(/[^\w-]/g, '')}.csv`;
+    a.click();
+    URL.revokeObjectURL(a.href);
+  };
+
   return (
     <div className="py-5">
       {/* Legend + completeness guarantee */}
@@ -61,9 +109,19 @@ export function SplitReader({ circular: c }: { circular: Circular }) {
             {CHANGE_META[k].label}
           </span>
         ))}
-        <span className="ml-auto text-[11px] text-on-surface-variant inline-flex items-center gap-1">
-          <span className="material-symbols-outlined text-[14px]">verified</span>
-          {c.clauses.length} paras · all shown · verbatim from source
+        <span className="ml-auto flex items-center gap-3">
+          <span className="text-[11px] text-on-surface-variant inline-flex items-center gap-1">
+            <span className="material-symbols-outlined text-[14px]">verified</span>
+            {c.clauses.length} paras · all shown · verbatim from source
+          </span>
+          <button
+            onClick={downloadExcel}
+            title="Clause-by-clause checklist: verbatim text, category tags, deadlines, evidence — opens in Excel"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary text-on-primary text-[12px] font-medium shadow-sm hover:opacity-90 transition-opacity"
+          >
+            <span className="material-symbols-outlined text-[15px]">download</span>
+            Download Complete Checklist as Excel
+          </button>
         </span>
       </div>
 
