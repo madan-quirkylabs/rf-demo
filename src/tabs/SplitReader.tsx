@@ -1,7 +1,8 @@
 import { useMemo, useState } from 'react';
-import type { ChangeType, Circular, SourceClause } from '../data/types';
+import type { Circular, Clarification, SourceClause } from '../data/types';
 import { CHANGE_META } from './changeMeta';
 import { DiffText } from './paraDiff';
+import type { CircularLens } from '../sections/IndexPage';
 
 const CATEGORY_LABEL: Record<string, string> = {
   reporting: 'Reporting',
@@ -15,21 +16,57 @@ const CATEGORY_LABEL: Record<string, string> = {
 /** Base para of a ref: "Para 74(5)" → "Para 74". */
 const baseRef = (r: string) => r.split('(')[0].trim();
 
+const paraNum = (r: string) => Number(baseRef(r).replace(/\D+/g, ''));
+
+const FILTER_CHIPS: { id: CircularLens; label: string; icon: string }[] = [
+  { id: 'all', label: 'All', icon: 'format_list_numbered' },
+  { id: 'changed', label: 'Changed', icon: 'difference' },
+  { id: 'commentary', label: 'Commentary', icon: 'record_voice_over' },
+  { id: 'questions', label: 'Questions', icon: 'forum' },
+];
+
 /**
- * SplitReader — the trust surface (P1). Left: every para of the circular,
- * verbatim, with track-changes highlighting on amendments. Right: drill-down
- * for the selected para — old circular vs. new circular, and the checklist
- * rows derived from it. Nothing is hidden; the para list is always complete.
+ * SplitReader — the trust surface (P1). Left: the paras, verbatim, with
+ * track-changes highlighting on amendments, scoped by filter chips (All is
+ * the complete circular; the others are explicit, counted subsets). Right:
+ * drill-down for the selected para — old vs. new, checklist, partner
+ * commentary, and community questions.
  */
 export function SplitReader({
   circular: c,
   focusRef,
+  filter = 'all',
+  onFilterChange,
 }: {
   circular: Circular;
   /** Para ref to preselect (used when jumping in from commentary). */
   focusRef?: string;
+  /** Scope of the para list — filter chips, not tabs. */
+  filter?: CircularLens;
+  onFilterChange?: (f: CircularLens) => void;
 }) {
-  const clauses = c.clauses;
+  const commentaryParas = useMemo(
+    () => new Set(c.commentary.flatMap((co) => (co.clauseRef.match(/\d+/g) ?? []).map(Number))),
+    [c]
+  );
+  const questionParas = useMemo(
+    () => new Set(c.clarifications.flatMap((q) => (q.clauseRef.match(/\d+/g) ?? []).map(Number))),
+    [c]
+  );
+
+  const clauses = useMemo(() => {
+    switch (filter) {
+      case 'changed':
+        return c.clauses.filter((cl) => cl.changeType !== 'unchanged');
+      case 'commentary':
+        return c.clauses.filter((cl) => commentaryParas.has(paraNum(cl.ref)));
+      case 'questions':
+        return c.clauses.filter((cl) => questionParas.has(paraNum(cl.ref)));
+      default:
+        return c.clauses;
+    }
+  }, [c, filter, commentaryParas, questionParas]);
+
   const [selectedId, setSelectedId] = useState<string>(
     (focusRef && clauses.find((cl) => baseRef(cl.ref) === baseRef(focusRef))?.id) ||
       clauses[0]?.id ||
@@ -43,11 +80,25 @@ export function SplitReader({
   /** Commentary is pinned by para number, so "Paras 61, 67" matches Para 61. */
   const paraCommentary = useMemo(() => {
     if (!selected) return [];
-    const n = Number(baseRef(selected.ref).replace(/\D+/g, ''));
+    const n = paraNum(selected.ref);
     return c.commentary.filter((co) =>
       (co.clauseRef.match(/\d+/g) ?? []).map(Number).includes(n)
     );
   }, [c, selected]);
+
+  /** Community Q&A pinned to this para, plus locally asked questions. */
+  const [asked, setAsked] = useState<Clarification[]>([]);
+  const [askOpen, setAskOpen] = useState(false);
+  const [askText, setAskText] = useState('');
+  const [votes, setVotes] = useState<Record<string, number>>({});
+  const paraQuestions = useMemo(() => {
+    if (!selected) return [];
+    const n = paraNum(selected.ref);
+    const base = c.clarifications.filter((q) =>
+      (q.clauseRef.match(/\d+/g) ?? []).map(Number).includes(n)
+    );
+    return [...base, ...asked.filter((q) => q.clauseRef === selected.ref)];
+  }, [c, selected, asked]);
 
   /** The finale: the full checklist, clause-by-clause, verbatim included. */
   const downloadExcel = () => {
@@ -90,18 +141,41 @@ export function SplitReader({
 
   return (
     <div className="py-5">
-      {/* Legend + completeness guarantee */}
-      <div className="px-4 pb-3 flex items-center gap-4 flex-wrap">
-        {(Object.keys(CHANGE_META) as ChangeType[]).map((k) => (
-          <span key={k} className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium border ${CHANGE_META[k].chip}`}>
-            <span className="w-2 h-2 rounded-full bg-current" />
-            {CHANGE_META[k].label}
-          </span>
-        ))}
-          <span className="ml-auto flex items-center gap-3">
+      {/* Filter chips — one list, counted scopes; 'All' is the complete circular */}
+      <div className="px-4 pb-3 flex items-center gap-2 flex-wrap border-b border-outline-variant/10">
+        {FILTER_CHIPS.map((f) => {
+          const count =
+            f.id === 'all'
+              ? c.clauses.length
+              : f.id === 'changed'
+                ? c.clauses.filter((cl) => cl.changeType !== 'unchanged').length
+                : f.id === 'commentary'
+                  ? c.clauses.filter((cl) => commentaryParas.has(paraNum(cl.ref))).length
+                  : c.clauses.filter((cl) => questionParas.has(paraNum(cl.ref))).length;
+          return (
+            <button
+              key={f.id}
+              onClick={() => onFilterChange?.(f.id)}
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[12px] font-medium border transition-colors ${
+                filter === f.id
+                  ? 'bg-primary text-on-primary border-primary shadow-sm'
+                  : 'bg-surface-container-lowest border-outline-variant/40 text-on-surface-variant hover:border-primary/50 hover:text-on-surface'
+              }`}
+            >
+              <span className="material-symbols-outlined text-[14px]">{f.icon}</span>
+              {f.label}
+              <span className={`text-[10px] ${filter === f.id ? 'opacity-80' : 'text-on-surface-variant'}`}>
+                {count}
+              </span>
+            </button>
+          );
+        })}
+        <span className="ml-auto flex items-center gap-3">
           <span className="text-[11px] text-on-surface-variant inline-flex items-center gap-1">
             <span className="material-symbols-outlined text-[14px]">verified</span>
-            {clauses.length} paras · all shown · verbatim from source
+            {filter === 'all'
+              ? `${c.clauses.length} paras · all shown · verbatim from source`
+              : `showing ${clauses.length} of ${c.clauses.length} paras`}
           </span>
           <button
             onClick={downloadExcel}
@@ -233,6 +307,112 @@ export function SplitReader({
                         </li>
                       ))}
                     </ul>
+                  )}
+                </div>
+
+                {/* Community questions pinned to this para */}
+                <div className="rounded-lg border border-outline-variant/20 bg-surface p-3.5">
+                  <p className="text-[10px] font-semibold uppercase tracking-wider text-on-surface-variant mb-2 flex items-center gap-1">
+                    <span className="material-symbols-outlined text-[13px]">forum</span>
+                    Questions on this para
+                  </p>
+
+                  {paraQuestions.length === 0 && !askOpen && (
+                    <p className="text-[12px] italic text-on-surface-variant mb-2">
+                      No questions yet on this para.
+                    </p>
+                  )}
+
+                  <ul className="space-y-3">
+                    {paraQuestions.map((q) => {
+                      const v = votes[q.id] ?? q.upvotes;
+                      return (
+                        <li key={q.id} className="text-[12.5px] leading-relaxed">
+                          <div className="flex items-start gap-2">
+                            <button
+                              onClick={() => setVotes((s) => ({ ...s, [q.id]: v + 1 }))}
+                              className="flex flex-col items-center shrink-0 group"
+                              aria-label="Upvote"
+                            >
+                              <span className="material-symbols-outlined text-[15px] text-on-surface-variant group-hover:text-primary transition-colors">
+                                arrow_upward
+                              </span>
+                              <span className="text-[11px] font-semibold text-on-surface-variant group-hover:text-primary">
+                                {v}
+                              </span>
+                            </button>
+                            <div className="min-w-0">
+                              <p className="font-medium leading-snug">{q.text}</p>
+                              <p className="text-[10.5px] text-on-surface-variant mt-0.5">
+                                asked by {q.askedBy}
+                              </p>
+                              {q.aiAnswer ? (
+                                <div className="mt-2 p-2.5 rounded-md bg-primary/[0.06] border border-primary/15">
+                                  <p className="text-[12px] leading-relaxed mb-1.5">{q.aiAnswer.text}</p>
+                                  <p className="text-[10px] text-on-surface-variant flex items-center gap-1">
+                                    <span className="material-symbols-outlined text-[11px] text-primary">format_quote</span>
+                                    Grounded in {q.aiAnswer.basedOn.map((s) => s.author).join(', ')}
+                                  </p>
+                                </div>
+                              ) : (
+                                <p className="text-[11px] italic text-on-surface-variant mt-1">
+                                  No answer yet — waiting for partner commentary to ground a response.
+                                </p>
+                              )}
+                            </div>
+                          </div>
+                        </li>
+                      );
+                    })}
+                  </ul>
+
+                  {/* Ask inline — no destination, the clause is the context */}
+                  {askOpen ? (
+                    <div className="mt-3">
+                      <textarea
+                        value={askText}
+                        onChange={(e) => setAskText(e.target.value)}
+                        placeholder={`Your question about ${selected.ref}…`}
+                        rows={2}
+                        className="w-full p-2.5 rounded-lg border border-outline-variant/40 bg-surface-container-lowest text-[12px] focus:outline-none focus:border-primary/60 resize-none"
+                      />
+                      <div className="flex items-center gap-2 mt-1.5">
+                        <button
+                          onClick={() => {
+                            if (!askText.trim() || !selected) return;
+                            setAsked((a) => [
+                              ...a,
+                              {
+                                id: `local-${Date.now()}`,
+                                clauseRef: selected.ref,
+                                askedBy: 'You',
+                                text: askText.trim(),
+                                upvotes: 0,
+                              },
+                            ]);
+                            setAskText('');
+                            setAskOpen(false);
+                          }}
+                          className="px-3 py-1 rounded-lg bg-primary text-on-primary text-[11.5px] font-medium shadow-sm hover:opacity-90"
+                        >
+                          Post question
+                        </button>
+                        <button
+                          onClick={() => setAskOpen(false)}
+                          className="text-[11.5px] text-on-surface-variant hover:text-on-surface"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <button
+                      onClick={() => setAskOpen(true)}
+                      className="mt-2 inline-flex items-center gap-1 text-[11.5px] font-medium text-primary hover:underline"
+                    >
+                      <span className="material-symbols-outlined text-[14px]">add</span>
+                      Ask a question about {selected.ref}
+                    </button>
                   )}
                 </div>
               </>

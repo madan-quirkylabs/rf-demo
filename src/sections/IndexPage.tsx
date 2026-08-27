@@ -3,7 +3,7 @@ import { circulars } from '../data';
 import type { Circular } from '../data/types';
 import { SearchBar } from '../components/SearchBar';
 
-export type CircularLens = 'read' | 'clarify';
+export type CircularLens = 'all' | 'changed' | 'commentary' | 'questions';
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
@@ -299,7 +299,7 @@ function IndexRow({
 }) {
   return (
     <button
-      onClick={() => onOpen(c.id, 'read')}
+      onClick={() => onOpen(c.id, 'all')}
       className="w-full text-left px-5 py-4 hover:bg-surface-container-low/60 transition-colors group"
     >
       <div className="flex items-center gap-2 mb-1 flex-wrap">
