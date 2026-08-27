@@ -1,15 +1,9 @@
 import { useState } from 'react';
 import { circulars } from './data';
-import type { Circular, ReaderProfile } from './data/types';
-import { HeroSection } from './sections/HeroSection';
-import { AnalysisPane } from './sections/AnalysisPane';
-import { PersonalizeBar } from './sections/PersonalizeBar';
-import { CommentarySection } from './sections/CommentarySection';
-import { ClarificationsSection } from './sections/ClarificationsSection';
-import { SearchBar } from './components/SearchBar';
-import { PreScreen } from './components/PreScreen';
-import { DigestRail } from './components/DigestRail';
-import type { AnalysisTab } from './sections/AnalysisPane';
+import type { ReaderProfile } from './data/types';
+import { IndexPage } from './sections/IndexPage';
+import type { CircularLens } from './sections/IndexPage';
+import { CircularPage } from './sections/CircularPage';
 
 const EMPTY_PROFILE: ReaderProfile = {
   regulated: null,
@@ -17,77 +11,58 @@ const EMPTY_PROFILE: ReaderProfile = {
   worksWithRegulatedEntities: null,
 };
 
+interface OpenCircular {
+  id: string;
+  lens: CircularLens;
+}
+
+/**
+ * App shell — two-level structure:
+ *   Index (all circulars + the only search) → Circular page (two tabs:
+ *   Circular & Checklist / Clarify). No search or digest chrome on the
+ *   circular page itself; discovery happens on the index.
+ */
 export default function App() {
-  const [circularId, setCircularId] = useState<string>(circulars[0].id);
-  const [tab, setTab] = useState<AnalysisTab>('change');
+  const [open, setOpen] = useState<OpenCircular | null>(null);
   const [profile, setProfile] = useState<ReaderProfile>(EMPTY_PROFILE);
-  const c: Circular = circulars.find((x) => x.id === circularId) ?? circulars[0];
+  const c = open ? circulars.find((x) => x.id === open.id) : undefined;
 
   return (
     <main className="min-h-screen bg-surface text-on-surface flex flex-col">
-      {/* App chrome — regulator/circular selector only; no top-level content tabs */}
       <header className="bg-surface border-b border-outline-variant/10 px-8 py-3 flex items-center justify-between gap-4 z-10 flex-wrap sticky top-0">
-        <div className="flex items-center gap-3 min-w-0">
+        <button
+          onClick={() => setOpen(null)}
+          className="flex items-center gap-3 min-w-0"
+          title="Back to index"
+        >
           <div className="w-7 h-7 rounded bg-primary text-on-primary flex items-center justify-center shrink-0">
             <span className="material-symbols-outlined text-lg">account_balance</span>
           </div>
-          <div className="min-w-0">
-            <h2 className="text-sm font-semibold truncate">Regulatory Analysis Workspace</h2>
-            <p className="text-[11px] text-on-surface-variant truncate">source-traceable obligations &amp; change</p>
+          <div className="min-w-0 text-left">
+            <h2 className="text-sm font-semibold truncate">RegulatoryFabric Live</h2>
+            <p className="text-[11px] text-on-surface-variant truncate">
+              circular in · checklist out
+            </p>
           </div>
-        </div>
-
-        {/* Free / no-login signal + global search */}
-        <div className="flex items-center gap-2 flex-wrap">
-          <SearchBar
-            onSelect={(cid, t) => {
-              setCircularId(cid);
-              setTab(t);
-            }}
-          />
-          <span className="inline-flex items-center gap-1 text-[11px] font-medium text-primary bg-primary/10 border border-primary/20 px-2 py-1 rounded-full">
-            <span className="material-symbols-outlined text-[13px]">lock_open</span>
-            Full value · no account needed
-          </span>
-          <div className="flex items-center gap-1 bg-surface-container-low rounded-lg p-1 flex-wrap">
-            {circulars.map((x) => (
-            <button
-              key={x.id}
-              onClick={() => setCircularId(x.id)}
-              className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
-                circularId === x.id
-                  ? 'bg-surface-container-highest text-on-surface shadow-sm'
-                  : 'text-on-surface-variant hover:text-on-surface'
-              }`}
-            >
-              <span className="font-mono">{x.regulator}</span>
-              <span className="hidden xl:inline"> · {x.dated}</span>
-            </button>
-          ))}
-          </div>
-        </div>
+        </button>
       </header>
 
-      {/* Single-page flow: applicability + summary → personalize → analysis (incl. checklist) → commentary → clarifications */}
-      <div className="px-8 py-6 max-w-[1440px] w-full mx-auto space-y-8">
-        <HeroSection circular={c} />
-        <DigestRail circulars={circulars} activeId={circularId} onSelect={setCircularId} />
-        <PersonalizeBar
+      {c && open ? (
+        <CircularPage
+          key={c.id}
+          circular={c}
           circulars={circulars}
           profile={profile}
-          onChange={setProfile}
-          onSelectCircular={setCircularId}
+          onProfileChange={setProfile}
+          onBack={() => setOpen(null)}
+          onOpenCircular={(id) => setOpen({ id, lens: 'checklist' })}
+          initialLens={open.lens}
         />
-        <PreScreen
-          onSelect={(cid, t) => {
-            setCircularId(cid);
-            setTab(t);
-          }}
+      ) : (
+        <IndexPage
+          onOpen={(id, lens) => setOpen({ id, lens })}
         />
-        <AnalysisPane circular={c} tab={tab} onTabChange={setTab} />
-        <CommentarySection circular={c} />
-        <ClarificationsSection circular={c} />
-      </div>
+      )}
     </main>
   );
 }

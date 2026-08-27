@@ -11,8 +11,8 @@ interface Hit {
   ref: string;
   title: string;
   snippet: string;
-  /** Which analysis tab surfaces this content */
-  tab: 'change' | 'overview' | 'reader' | 'trace' | 'checklist';
+  /** Which lens of the circular page surfaces this content */
+  tab: 'checklist' | 'read' | 'clarify';
 }
 
 const KIND_META: Record<HitKind, { label: string; icon: string }> = {
@@ -34,7 +34,7 @@ function buildIndex(): Hit[] {
         ref: cl.ref,
         title: cl.section ?? cl.ref,
         snippet: cl.text,
-        tab: 'reader',
+        tab: 'read',
       });
     }
     for (const ck of c.checklist) {
@@ -56,7 +56,7 @@ function buildIndex(): Hit[] {
         ref: com.clauseRef,
         title: `${com.author} — ${com.publishedAt}`,
         snippet: com.text,
-        tab: 'change',
+        tab: 'clarify',
       });
     }
     for (const q of c.clarifications) {
@@ -67,7 +67,7 @@ function buildIndex(): Hit[] {
         ref: q.clauseRef,
         title: q.text,
         snippet: q.aiAnswer?.text ?? 'Open question — awaiting partner commentary.',
-        tab: 'change',
+        tab: 'clarify',
       });
     }
   }
