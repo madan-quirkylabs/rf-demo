@@ -2,7 +2,6 @@ import { useMemo, useState } from 'react';
 import type { Circular, Clarification, SourceClause } from '../data/types';
 import { CHANGE_META } from './changeMeta';
 import { DiffText } from './paraDiff';
-import type { CircularLens } from '../sections/IndexPage';
 
 const CATEGORY_LABEL: Record<string, string> = {
   reporting: 'Reporting',
@@ -18,54 +17,21 @@ const baseRef = (r: string) => r.split('(')[0].trim();
 
 const paraNum = (r: string) => Number(baseRef(r).replace(/\D+/g, ''));
 
-const FILTER_CHIPS: { id: CircularLens; label: string; icon: string }[] = [
-  { id: 'all', label: 'All', icon: 'format_list_numbered' },
-  { id: 'changed', label: 'Changed', icon: 'difference' },
-  { id: 'commentary', label: 'Commentary', icon: 'record_voice_over' },
-  { id: 'questions', label: 'Questions', icon: 'forum' },
-];
-
 /**
- * SplitReader — the trust surface (P1). Left: the paras, verbatim, with
- * track-changes highlighting on amendments, scoped by filter chips (All is
- * the complete circular; the others are explicit, counted subsets). Right:
- * drill-down for the selected para — old vs. new, checklist, partner
- * commentary, and community questions.
+ * SplitReader — the trust surface (P1). Left: every para of the circular,
+ * verbatim, with track-changes highlighting on amendments. Right: drill-down
+ * for the selected para — old vs. new, checklist, partner commentary, and
+ * community questions. The para list is always complete.
  */
 export function SplitReader({
   circular: c,
   focusRef,
-  filter = 'all',
-  onFilterChange,
 }: {
   circular: Circular;
   /** Para ref to preselect (used when jumping in from commentary). */
   focusRef?: string;
-  /** Scope of the para list — filter chips, not tabs. */
-  filter?: CircularLens;
-  onFilterChange?: (f: CircularLens) => void;
 }) {
-  const commentaryParas = useMemo(
-    () => new Set(c.commentary.flatMap((co) => (co.clauseRef.match(/\d+/g) ?? []).map(Number))),
-    [c]
-  );
-  const questionParas = useMemo(
-    () => new Set(c.clarifications.flatMap((q) => (q.clauseRef.match(/\d+/g) ?? []).map(Number))),
-    [c]
-  );
-
-  const clauses = useMemo(() => {
-    switch (filter) {
-      case 'changed':
-        return c.clauses.filter((cl) => cl.changeType !== 'unchanged');
-      case 'commentary':
-        return c.clauses.filter((cl) => commentaryParas.has(paraNum(cl.ref)));
-      case 'questions':
-        return c.clauses.filter((cl) => questionParas.has(paraNum(cl.ref)));
-      default:
-        return c.clauses;
-    }
-  }, [c, filter, commentaryParas, questionParas]);
+  const clauses = c.clauses;
 
   const [selectedId, setSelectedId] = useState<string>(
     (focusRef && clauses.find((cl) => baseRef(cl.ref) === baseRef(focusRef))?.id) ||
@@ -141,41 +107,18 @@ export function SplitReader({
 
   return (
     <div className="py-5">
-      {/* Filter chips — one list, counted scopes; 'All' is the complete circular */}
-      <div className="px-4 pb-3 flex items-center gap-2 flex-wrap border-b border-outline-variant/10">
-        {FILTER_CHIPS.map((f) => {
-          const count =
-            f.id === 'all'
-              ? c.clauses.length
-              : f.id === 'changed'
-                ? c.clauses.filter((cl) => cl.changeType !== 'unchanged').length
-                : f.id === 'commentary'
-                  ? c.clauses.filter((cl) => commentaryParas.has(paraNum(cl.ref))).length
-                  : c.clauses.filter((cl) => questionParas.has(paraNum(cl.ref))).length;
-          return (
-            <button
-              key={f.id}
-              onClick={() => onFilterChange?.(f.id)}
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[12px] font-medium border transition-colors ${
-                filter === f.id
-                  ? 'bg-primary text-on-primary border-primary shadow-sm'
-                  : 'bg-surface-container-lowest border-outline-variant/40 text-on-surface-variant hover:border-primary/50 hover:text-on-surface'
-              }`}
-            >
-              <span className="material-symbols-outlined text-[14px]">{f.icon}</span>
-              {f.label}
-              <span className={`text-[10px] ${filter === f.id ? 'opacity-80' : 'text-on-surface-variant'}`}>
-                {count}
-              </span>
-            </button>
-          );
-        })}
+      {/* Completeness guarantee */}
+      <div className="px-4 pb-3 flex items-center gap-4 flex-wrap">
+        {(Object.keys(CHANGE_META) as (keyof typeof CHANGE_META)[]).map((k) => (
+          <span key={k} className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium border ${CHANGE_META[k].chip}`}>
+            <span className="w-2 h-2 rounded-full bg-current" />
+            {CHANGE_META[k].label}
+          </span>
+        ))}
         <span className="ml-auto flex items-center gap-3">
           <span className="text-[11px] text-on-surface-variant inline-flex items-center gap-1">
             <span className="material-symbols-outlined text-[14px]">verified</span>
-            {filter === 'all'
-              ? `${c.clauses.length} paras · all shown · verbatim from source`
-              : `showing ${clauses.length} of ${c.clauses.length} paras`}
+            {c.clauses.length} paras · all shown · verbatim from source
           </span>
           <button
             onClick={downloadExcel}

@@ -12,7 +12,7 @@ interface Hit {
   title: string;
   snippet: string;
   /** Which filter chip of the circular page surfaces this content */
-  tab: 'all' | 'changed' | 'commentary' | 'questions';
+  tab: 'read' | 'highlights';
 }
 
 const KIND_META: Record<HitKind, { label: string; icon: string }> = {
@@ -34,7 +34,7 @@ function buildIndex(): Hit[] {
         ref: cl.ref,
         title: cl.section ?? cl.ref,
         snippet: cl.text,
-        tab: 'all',
+        tab: 'read',
       });
     }
     for (const ck of c.checklist) {
@@ -45,7 +45,7 @@ function buildIndex(): Hit[] {
         ref: ck.ref,
         title: ck.action,
         snippet: ck.evidenceExpected,
-        tab: 'all',
+        tab: 'read',
       });
     }
     for (const com of c.commentary) {
@@ -56,7 +56,7 @@ function buildIndex(): Hit[] {
         ref: com.clauseRef,
         title: `${com.author} — ${com.publishedAt}`,
         snippet: com.text,
-        tab: 'commentary',
+        tab: 'highlights',
       });
     }
     for (const q of c.clarifications) {
@@ -67,7 +67,7 @@ function buildIndex(): Hit[] {
         ref: q.clauseRef,
         title: q.text,
         snippet: q.aiAnswer?.text ?? 'Open question — awaiting partner commentary.',
-        tab: 'questions',
+        tab: 'read',
       });
     }
   }
