@@ -9,6 +9,8 @@ export interface SourceClause {
   section?: string;
   /** The clause text as published (quoted; keep verbatim where possible). */
   text: string;
+  /** For amended clauses: the prior instrument's version of this clause. */
+  previousText?: string;
   /** How this clause moved relative to the prior instrument. */
   changeType: ChangeType;
   /** Obligations in this Circular that trace to this clause. */

@@ -4,7 +4,7 @@ import { HeroSection } from './HeroSection';
 import { CommentarySection } from './CommentarySection';
 import { ClarificationsSection } from './ClarificationsSection';
 import { ChangeTab } from '../tabs/ChangeTab';
-import { CircularReaderTab } from '../tabs/CircularReaderTab';
+import { SplitReader } from '../tabs/SplitReader';
 import { ChecklistTab } from '../tabs/ChecklistTab';
 import type { CircularLens } from './IndexPage';
 
@@ -104,7 +104,7 @@ export function CircularPage({
             </div>
             <div className="px-2 pb-2">
               {lens === 'checklist' && <ChecklistTab key={c.id} circular={c} />}
-              {lens === 'read' && <CircularReaderTab key={c.id} circular={c} />}
+              {lens === 'read' && <SplitReader key={c.id} circular={c} />}
               {lens === 'change' && <ChangeTab circular={c} />}
             </div>
           </>

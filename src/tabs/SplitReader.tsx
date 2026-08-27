@@ -1,0 +1,196 @@
+import { useMemo, useState } from 'react';
+import type { ChangeType, Circular, SourceClause } from '../data/types';
+
+const CHANGE_META: Record<ChangeType, { label: string; chip: string }> = {
+  new: { label: 'New', chip: 'bg-primary/10 text-primary border-primary/20' },
+  amended: { label: 'Amended', chip: 'bg-tertiary/10 text-tertiary border-tertiary/20' },
+  withdrawn: { label: 'Withdrawn', chip: 'bg-error-container text-on-error-container border-error/20' },
+  unchanged: { label: 'Unchanged', chip: 'bg-surface-container-highest text-on-surface-variant border-outline-variant/30' },
+};
+
+/** Base para of a ref: "Para 74(5)" → "Para 74". */
+const baseRef = (r: string) => r.split('(')[0].trim();
+
+/**
+ * Naive word-level diff for the left pane: words in the new text that don't
+ * appear in the old version render green (Google-Docs-style additions).
+ * Removals stay visible via the old text in the right pane.
+ */
+function DiffText({ text, previous }: { text: string; previous?: string }) {
+  const oldWords = useMemo(
+    () => (previous ? new Set(previous.toLowerCase().match(/[\p{L}\p{N}]+/gu) ?? []) : null),
+    [previous]
+  );
+  if (!oldWords) return <>{text}</>;
+  const parts = text.split(/([\p{L}\p{N}]+)/gu);
+  return (
+    <>
+      {parts.map((p, i) =>
+        i % 2 === 1 && !oldWords.has(p.toLowerCase()) ? (
+          <mark key={i} className="bg-primary/15 text-primary rounded px-[1px]">
+            {p}
+          </mark>
+        ) : (
+          <span key={i}>{p}</span>
+        )
+      )}
+    </>
+  );
+}
+
+/**
+ * SplitReader — the trust surface (P1). Left: every para of the circular,
+ * verbatim, with track-changes highlighting on amendments. Right: drill-down
+ * for the selected para — old circular vs. new circular, and the checklist
+ * rows derived from it. Nothing is hidden; the para list is always complete.
+ */
+export function SplitReader({ circular: c }: { circular: Circular }) {
+  const [selectedId, setSelectedId] = useState<string>(c.clauses[0]?.id ?? '');
+  const selected = c.clauses.find((cl) => cl.id === selectedId) ?? c.clauses[0];
+  const paraChecklist = selected
+    ? c.checklist.filter((i) => baseRef(i.ref) === baseRef(selected.ref))
+    : [];
+
+  return (
+    <div className="py-5">
+      {/* Legend + completeness guarantee */}
+      <div className="px-4 pb-3 flex items-center gap-4 flex-wrap">
+        {(Object.keys(CHANGE_META) as ChangeType[]).map((k) => (
+          <span key={k} className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium border ${CHANGE_META[k].chip}`}>
+            <span className="w-2 h-2 rounded-full bg-current" />
+            {CHANGE_META[k].label}
+          </span>
+        ))}
+        <span className="ml-auto text-[11px] text-on-surface-variant inline-flex items-center gap-1">
+          <span className="material-symbols-outlined text-[14px]">verified</span>
+          {c.clauses.length} paras · all shown · verbatim from source
+        </span>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch">
+        {/* ---- Left: every para, track-changes view ---- */}
+        <div className="lg:col-span-6 xl:col-span-6 rounded-xl border border-outline-variant/20 bg-surface-container-lowest">
+          <div className="px-4 py-2.5 border-b border-outline-variant/20 flex items-center gap-2">
+            <span className="material-symbols-outlined text-[16px] text-primary">menu_book</span>
+            <h3 className="text-[12px] font-semibold">Circular — verbatim, clause by clause</h3>
+          </div>
+          <div className="max-h-[68vh] overflow-y-auto divide-y divide-outline-variant/10">
+            {c.clauses.map((cl) => (
+              <ParaCard
+                key={cl.id}
+                clause={cl}
+                active={cl.id === selected?.id}
+                onSelect={() => setSelectedId(cl.id)}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* ---- Right: drill-down for the selected para ---- */}
+        <div className="lg:col-span-6 xl:col-span-6 rounded-xl border border-outline-variant/20 bg-surface-container-lowest flex flex-col">
+          <div className="px-4 py-2.5 border-b border-outline-variant/20 flex items-center gap-2">
+            <span className="material-symbols-outlined text-[16px] text-primary">manage_search</span>
+            <h3 className="text-[12px] font-semibold">
+              {selected ? `${selected.ref} — old vs. new & checklist` : 'Select a para'}
+            </h3>
+          </div>
+
+          <div className="max-h-[68vh] overflow-y-auto p-4 space-y-4">
+            {!selected && (
+              <p className="text-[13px] text-on-surface-variant">Select a para on the left.</p>
+            )}
+            {selected && (
+              <>
+                {/* Old circular */}
+                <div className="rounded-lg border border-outline-variant/20 bg-surface p-3.5">
+                  <p className="text-[10px] font-semibold uppercase tracking-wider text-on-surface-variant mb-1.5 flex items-center gap-1">
+                    <span className="material-symbols-outlined text-[13px]">history</span>
+                    Old circular
+                  </p>
+                  {selected.previousText ? (
+                    <p className="text-[13px] leading-relaxed text-on-surface-variant">
+                      {selected.previousText}
+                    </p>
+                  ) : (
+                    <p className="text-[13px] italic text-on-surface-variant">
+                      New clause — no prior version in the previous instrument.
+                    </p>
+                  )}
+                </div>
+
+                {/* New circular */}
+                <div className="rounded-lg border border-primary/25 bg-primary/[0.04] p-3.5">
+                  <p className="text-[10px] font-semibold uppercase tracking-wider text-primary mb-1.5 flex items-center gap-1">
+                    <span className="material-symbols-outlined text-[13px]">description</span>
+                    New circular — {selected.ref}
+                  </p>
+                  <p className="text-[13px] leading-relaxed text-on-surface">
+                    <DiffText text={selected.text} previous={selected.previousText} />
+                  </p>
+                  {selected.section && (
+                    <p className="text-[11px] text-on-surface-variant mt-2">{selected.section}</p>
+                  )}
+                </div>
+
+                {/* Checklist for this para */}
+                <div className="rounded-lg border border-outline-variant/20 bg-surface p-3.5">
+                  <p className="text-[10px] font-semibold uppercase tracking-wider text-on-surface-variant mb-2 flex items-center gap-1">
+                    <span className="material-symbols-outlined text-[13px]">checklist</span>
+                    Checklist from this para
+                  </p>
+                  {paraChecklist.length === 0 ? (
+                    <p className="text-[12px] italic text-on-surface-variant">
+                      No action items derived from this para (information-only).
+                    </p>
+                  ) : (
+                    <ul className="space-y-2">
+                      {paraChecklist.map((i) => (
+                        <li key={i.id} className="text-[12.5px] leading-snug flex gap-2">
+                          <span className="font-mono text-[11px] text-primary shrink-0 mt-[2px]">{i.ref}</span>
+                          <span>{i.action}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ParaCard({
+  clause: cl,
+  active,
+  onSelect,
+}: {
+  clause: SourceClause;
+  active: boolean;
+  onSelect: () => void;
+}) {
+  const meta = CHANGE_META[cl.changeType];
+  return (
+    <button
+      onClick={onSelect}
+      className={`w-full text-left px-4 py-3.5 transition-colors ${
+        active ? 'bg-primary/[0.06] border-l-2 border-l-primary' : 'hover:bg-surface-container-low border-l-2 border-l-transparent'
+      }`}
+    >
+      <div className="flex items-center gap-2 mb-1 flex-wrap">
+        <span className="font-mono text-[11.5px] font-semibold text-primary">{cl.ref}</span>
+        <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wider border ${meta.chip}`}>
+          {meta.label}
+        </span>
+        {cl.section && (
+          <span className="text-[10.5px] text-on-surface-variant/80 truncate ml-auto">{cl.section}</span>
+        )}
+      </div>
+      <p className="text-[12.5px] leading-relaxed text-on-surface line-clamp-3">
+        <DiffText text={cl.text} previous={cl.previousText} />
+      </p>
+    </button>
+  );
+}

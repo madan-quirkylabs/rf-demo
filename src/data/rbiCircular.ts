@@ -128,6 +128,7 @@ export const rbiComplianceDirections: Circular = {
       section: 'Governance and Oversight — Role of the Board',
       changeType: 'amended',
       text: '"The Board shall ensure that the bank has an appropriate Compliance Policy in place and shall oversee its effective implementation. The Board shall review the policy at least annually."',
+      previousText: '"The Board shall ensure that the bank has an appropriate Compliance Policy in place. The Board shall review the policy periodically."',
       obligationIds: ['OBL-R1'],
     },
     {
@@ -136,6 +137,7 @@ export const rbiComplianceDirections: Circular = {
       section: 'Governance and Oversight — Role of the Board',
       changeType: 'amended',
       text: '"The Board or ACB shall review the Compliance function on a quarterly basis. A detailed annual review should also be placed before the Board / ACB. The Chief Compliance Officer (CCO) should be an invitee to such meetings."',
+      previousText: '"The Board or ACB shall review the Compliance function on a regular basis. The Chief Compliance Officer (CCO) should be an invitee to such meetings."',
       obligationIds: ['OBL-R2'],
     },
     {
