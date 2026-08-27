@@ -1,5 +1,4 @@
 import type { Circular } from '../data/types';
-import { Badge } from '../components/ui';
 
 /**
  * Hero — identity + applicability + neutral summary. Order mirrors what a
@@ -17,7 +16,6 @@ export function HeroSection({ circular: c }: { circular: Circular }) {
           </span>
           <span className="text-[11px] font-mono text-on-surface-variant">{c.refNo}</span>
           <span className="text-[11px] text-on-surface-variant">· dated {c.dated}</span>
-          <Badge tone={c.status === 'Effective' ? 'green' : 'neutral'}>{c.status}</Badge>
         </div>
         <h1 className="text-2xl font-semibold tracking-tight">{c.title}</h1>
       </div>
