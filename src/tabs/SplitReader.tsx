@@ -1,5 +1,7 @@
 import { useMemo, useState } from 'react';
 import type { ChangeType, Circular, SourceClause } from '../data/types';
+import { CHANGE_META } from './changeMeta';
+import { DiffText } from './paraDiff';
 
 const CATEGORY_LABEL: Record<string, string> = {
   reporting: 'Reporting',
@@ -10,42 +12,8 @@ const CATEGORY_LABEL: Record<string, string> = {
   info: 'Information-only',
 };
 
-const CHANGE_META: Record<ChangeType, { label: string; chip: string }> = {
-  new: { label: 'New', chip: 'bg-primary/10 text-primary border-primary/20' },
-  amended: { label: 'Amended', chip: 'bg-tertiary/10 text-tertiary border-tertiary/20' },
-  withdrawn: { label: 'Withdrawn', chip: 'bg-error-container text-on-error-container border-error/20' },
-  unchanged: { label: 'Unchanged', chip: 'bg-surface-container-highest text-on-surface-variant border-outline-variant/30' },
-};
-
 /** Base para of a ref: "Para 74(5)" → "Para 74". */
 const baseRef = (r: string) => r.split('(')[0].trim();
-
-/**
- * Naive word-level diff for the left pane: words in the new text that don't
- * appear in the old version render green (Google-Docs-style additions).
- * Removals stay visible via the old text in the right pane.
- */
-function DiffText({ text, previous }: { text: string; previous?: string }) {
-  const oldWords = useMemo(
-    () => (previous ? new Set(previous.toLowerCase().match(/[\p{L}\p{N}]+/gu) ?? []) : null),
-    [previous]
-  );
-  if (!oldWords) return <>{text}</>;
-  const parts = text.split(/([\p{L}\p{N}]+)/gu);
-  return (
-    <>
-      {parts.map((p, i) =>
-        i % 2 === 1 && !oldWords.has(p.toLowerCase()) ? (
-          <mark key={i} className="bg-primary/15 text-primary rounded px-[1px]">
-            {p}
-          </mark>
-        ) : (
-          <span key={i}>{p}</span>
-        )
-      )}
-    </>
-  );
-}
 
 /**
  * SplitReader — the trust surface (P1). Left: every para of the circular,

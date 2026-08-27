@@ -1,5 +1,7 @@
 import { useMemo, useState } from 'react';
-import type { Circular, Commentary } from '../data/types';
+import type { Circular, Commentary, SourceClause } from '../data/types';
+import { CHANGE_META } from './changeMeta';
+import { DiffText } from './paraDiff';
 
 const SOURCE_BADGE: Record<
   NonNullable<Commentary['sourceType']>,
@@ -10,8 +12,12 @@ const SOURCE_BADGE: Record<
   'industry-body': { label: 'Industry body', tone: 'bg-tertiary/10 text-tertiary border-tertiary/25' },
 };
 
-/** Base para of a ref: "Para 74(5)" → "Para 74". */
-const baseRef = (r: string) => r.split('(')[0].trim();
+/** Base para of a ref: "Paras 74(5)" / "Para 74" → "Para 74". */
+const baseRef = (r: string) =>
+  r
+    .split('(')[0]
+    .trim()
+    .replace(/^Paras?\s+/, 'Para ');
 
 /**
  * PartnerCommentary — the partner pitch surface. Partners are the headline:
@@ -94,7 +100,7 @@ export function PartnerCommentary({
             )}
             {visible.map((co) => {
               const sb = co.sourceType ? SOURCE_BADGE[co.sourceType] : null;
-              const paraRefs = co.clauseRef.match(/Para\s*\d+/g) ?? [co.clauseRef];
+              const paraRefs = co.clauseRef.match(/Paras?\s+\d+/g) ?? [co.clauseRef];
               return (
                 <div
                   key={co.id}
@@ -117,25 +123,20 @@ export function PartnerCommentary({
                     <span className="ml-auto text-[11px] text-on-surface-variant">{co.publishedAt}</span>
                   </div>
 
-                  {/* Para pin — the citation this commentary explains */}
-                  <div className="flex items-center gap-1.5 mb-2 flex-wrap">
-                    <span className="text-[10px] font-semibold uppercase tracking-wider text-on-surface-variant">
-                      On
-                    </span>
-                    {paraRefs.map((pr) => (
-                      <button
-                        key={pr}
-                        onClick={() => onOpenPara(baseRef(pr))}
-                        className="inline-flex items-center gap-1 px-2 py-[3px] rounded-full bg-primary/10 text-primary text-[11px] font-mono font-semibold border border-primary/20 hover:bg-primary/20 transition-colors"
-                        title="Open this para in the circular"
-                      >
-                        {pr}
-                        <span className="material-symbols-outlined text-[12px]">open_in_new</span>
-                      </button>
-                    ))}
+                  {/* Para change — the cited text, inline, then the commentary below */}
+                  <div className="space-y-2 mb-3">
+                    {paraRefs.map((pr) => {
+                      const cl = c.clauses.find((x) => baseRef(x.ref) === baseRef(pr));
+                      return (
+                        <ParaChangeBlock key={pr} clause={cl} paraRef={pr} onOpenPara={onOpenPara} />
+                      );
+                    })}
                   </div>
 
-                  <p className="text-[12.5px] leading-relaxed text-on-surface">{co.text}</p>
+                  <p className="text-[12.5px] leading-relaxed text-on-surface bg-primary/[0.05] border border-primary/15 rounded-lg p-3">
+                    <span className="material-symbols-outlined text-[13px] text-primary align-[-2px] mr-1">record_voice_over</span>
+                    {co.text}
+                  </p>
 
                   {co.sourceUrl && (
                     <a
@@ -152,6 +153,55 @@ export function PartnerCommentary({
             })}
           </div>
         </div>
+      </div>
+    </div>
+  );
+}
+
+/** The cited para rendered exactly as the reader's left pane shows it: ref,
+ *  change badge, track-changes-highlighted verbatim — plus the old version
+ *  for amended paras. Commentary follows directly beneath. */
+function ParaChangeBlock({
+  clause,
+  paraRef,
+  onOpenPara,
+}: {
+  clause?: SourceClause;
+  paraRef: string;
+  onOpenPara: (ref: string) => void;
+}) {
+  if (!clause) {
+    return (
+      <p className="text-[11px] italic text-on-surface-variant">{paraRef} (not in tracked clauses)</p>
+    );
+  }
+  const meta = CHANGE_META[clause.changeType];
+  return (
+    <div className="rounded-lg border border-outline-variant/25 bg-surface-container-low/50 overflow-hidden">
+      <div className="flex items-center gap-2 px-3 py-1.5 border-b border-outline-variant/15 flex-wrap">
+        <button
+          onClick={() => onOpenPara(clause.ref)}
+          className="font-mono text-[11.5px] font-semibold text-primary hover:underline"
+          title="Open this para in the circular"
+        >
+          {clause.ref}
+        </button>
+        <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wider border ${meta.chip}`}>
+          {meta.label}
+        </span>
+        {clause.section && (
+          <span className="text-[10.5px] text-on-surface-variant/80 truncate ml-auto">{clause.section}</span>
+        )}
+      </div>
+      <div className="px-3 py-2.5 space-y-1.5">
+        {clause.previousText && (
+          <p className="text-[12px] leading-relaxed text-on-surface-variant/70 line-through decoration-error/40">
+            {clause.previousText}
+          </p>
+        )}
+        <p className="text-[12.5px] leading-relaxed text-on-surface">
+          <DiffText text={clause.text} previous={clause.previousText} />
+        </p>
       </div>
     </div>
   );
