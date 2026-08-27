@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import type { Circular, ReaderProfile } from '../data/types';
+import type { Circular } from '../data/types';
 import { HeroSection } from './HeroSection';
-import { PersonalizeBar } from './PersonalizeBar';
 import { CommentarySection } from './CommentarySection';
 import { ClarificationsSection } from './ClarificationsSection';
 import { ChangeTab } from '../tabs/ChangeTab';
@@ -26,19 +25,11 @@ const LENSES: { id: Lens; label: string; icon: string }[] = [
  */
 export function CircularPage({
   circular: c,
-  circulars,
-  profile,
-  onProfileChange,
   onBack,
-  onOpenCircular,
   initialLens = 'checklist',
 }: {
   circular: Circular;
-  circulars: Circular[];
-  profile: ReaderProfile;
-  onProfileChange: (p: ReaderProfile) => void;
   onBack: () => void;
-  onOpenCircular: (id: string) => void;
   initialLens?: CircularLens;
 }) {
   const [tab, setTab] = useState<TopTab>(
@@ -59,13 +50,6 @@ export function CircularPage({
       </button>
 
       <HeroSection circular={c} />
-
-      <PersonalizeBar
-        circulars={circulars}
-        profile={profile}
-        onChange={onProfileChange}
-        onSelectCircular={onOpenCircular}
-      />
 
       {/* Top-level tabs — the two jobs this page does */}
       <section className="rounded-xl border border-outline-variant/20 bg-surface-container-lowest shadow-sm overflow-hidden">

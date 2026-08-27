@@ -1,15 +1,8 @@
 import { useState } from 'react';
 import { circulars } from './data';
-import type { ReaderProfile } from './data/types';
 import { IndexPage } from './sections/IndexPage';
 import type { CircularLens } from './sections/IndexPage';
 import { CircularPage } from './sections/CircularPage';
-
-const EMPTY_PROFILE: ReaderProfile = {
-  regulated: null,
-  licenses: [],
-  worksWithRegulatedEntities: null,
-};
 
 interface OpenCircular {
   id: string;
@@ -24,7 +17,6 @@ interface OpenCircular {
  */
 export default function App() {
   const [open, setOpen] = useState<OpenCircular | null>(null);
-  const [profile, setProfile] = useState<ReaderProfile>(EMPTY_PROFILE);
   const c = open ? circulars.find((x) => x.id === open.id) : undefined;
 
   return (
@@ -51,11 +43,7 @@ export default function App() {
         <CircularPage
           key={c.id}
           circular={c}
-          circulars={circulars}
-          profile={profile}
-          onProfileChange={setProfile}
           onBack={() => setOpen(null)}
-          onOpenCircular={(id) => setOpen({ id, lens: 'checklist' })}
           initialLens={open.lens}
         />
       ) : (
