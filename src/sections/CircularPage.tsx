@@ -4,6 +4,7 @@ import { HeroSection } from './HeroSection';
 import { CommentarySection } from './CommentarySection';
 import { ClarificationsSection } from './ClarificationsSection';
 import { SplitReader } from '../tabs/SplitReader';
+import { ChangeSummary } from '../tabs/ChangeSummary';
 import type { CircularLens } from './IndexPage';
 
 type TopTab = 'circular' | 'clarify';
@@ -100,7 +101,10 @@ export function CircularPage({
             <div className="px-2 pb-2">
               {lens === 'read' && <SplitReader key={`read-${c.id}`} circular={c} />}
               {lens === 'highlights' && (
-                <SplitReader key={`hi-${c.id}`} circular={c} highlightsOnly />
+                <div key={`hi-${c.id}`}>
+                  <ChangeSummary circular={c} />
+                  <SplitReader circular={c} highlightsOnly />
+                </div>
               )}
             </div>
           </>
