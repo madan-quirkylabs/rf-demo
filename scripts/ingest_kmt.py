@@ -92,13 +92,49 @@ def split_paragraphs(text: str):
     return clauses
 
 
-def guess_applies_to(clauses):
-    for _sec, ref, body in clauses:
-        m = re.search(
-            r"(?:shall apply to|applies to|applicable to)\s+(?:all\s+)?([^.]{3,80})\.", body, re.I)
-        if m:
-            return [m.group(1).strip().rstrip(";,").title()]
-    return ["All regulated entities"]
+# Canonical regulated-entity vocabulary (clean index facet values).
+# Specific bank types before the generic 'banks' catch; ordered = display order.
+CANONICAL_ENTITIES = [
+    ("Commercial Banks", r"commercial bank"),
+    ("Payments Banks", r"payments bank"),
+    ("Small Finance Banks", r"small finance bank"),
+    ("Local Area Banks", r"local area bank"),
+    ("Regional Rural Banks", r"regional rural bank"),
+    ("Cooperative Banks", r"co-?operative bank"),
+    ("NBFCs", r"non-?banking financial compan|\bnbfc"),
+    ("Housing Finance Companies", r"housing finance compan|\bhfc\b"),
+    ("Micro Finance Institutions", r"micro ?finance (institution|compan|mfi)"),
+    ("Asset Reconstruction Companies", r"asset reconstruction compan|\barc\b"),
+    ("Credit Information Companies", r"credit information compan|\bcic\b"),
+    ("Mutual Funds / AMCs", r"mutual fund|asset management compan|\bamc\b"),
+    ("Portfolio Managers", r"portfolio manager|\bpms\b"),
+    ("FPIs", r"foreign portfolio invest|\bfpi\b"),
+ ("SEBI Registered Intermediaries", r"registered intermediar|stock ?broker|merchant banker|depository participant"),
+    ("Insurers", r"insur(er|ance compan)"),
+    ("Pension Funds", r"pension fund"),
+    ("IFSC Entities", r"\bifsc|gift city|international financial services centre"),
+]
+
+
+def guess_applies_to(clauses, title=""):
+    """Match canonical entity names in the circular's applicability para
+    (then title + early paras). Falls back to a clean generic — never a
+    sentence fragment."""
+    applicability = " ".join(
+        body for _sec, _ref, body in clauses
+        if re.search(r"appl(y|ies|icable)", body, re.I)
+    ) or " ".join(body for _sec, _ref, body in clauses[:8])
+    hay = f"{title} {applicability}".lower()
+
+    matched = [label for label, pat in CANONICAL_ENTITIES if re.search(pat, hay)]
+
+    # Generic 'banks' only when no specific bank type matched.
+    if not matched and re.search(r"\bbanks?\b", hay):
+        matched = ["All Banks"]
+    # De-dup: 'All Banks' is implied by any specific bank type.
+    if len(matched) > 1:
+        matched = [m for m in matched if m != "All Banks"] or matched
+    return matched[:4] if matched else ["All regulated entities"]
 
 
 def main():
@@ -143,7 +179,7 @@ def main():
             "regulator": authority,
             "instrumentType": "Circular" if ctype in ("Circular", "Master Circular") else "Notification",
             "status": "Effective",
-            "appliesTo": guess_applies_to(clauses),
+            "appliesTo": guess_applies_to(clauses, title),
             "summary": clauses[0][2][:400],
             "firstTracked": True,  # no prior version in corpus — no diff claims
             "current": {"summary": "", "effectiveFrom": "", "interpretationBasis": []},

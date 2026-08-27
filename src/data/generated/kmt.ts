@@ -14,7 +14,8 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Circular",
     "status": "Effective",
     "appliesTo": [
-      "All regulated entities"
+      "FPIs",
+      "SEBI Registered Intermediaries"
     ],
     "summary": "SEBI vide \"Master Circular for Foreign Portfolio Investors, Designated Depository Participants and Eligible Foreign Investors\" No. SEBI/HO/AFD/AFD-PoD2/P/CIR/P/2024/70 dated May 30, 2024 as amended from time to time (hereinafter referred to as the 'FPI Master Circular') has, inter alia, specified the KYC requirements for FPIs and the list of supporting documents admissible as Proof of Address.",
     "firstTracked": true,
@@ -104,7 +105,7 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Circular",
     "status": "Effective",
     "appliesTo": [
-      "All regulated entities"
+      "IFSC Entities"
     ],
     "summary": "With reference to the subject matter, to facilitate sharing of information between SEBI registered KRAs and the entities regulated by other regulators in the financial sector, Regulation 16A(1) of the Securities and Exchange Board of India {KYC (Know Your Client) Registration Agency} Regulations, 2011 (\" SEBI KRA Regulations \"), provides that : \"16A. (1) The entities, regulated by other regulators",
     "firstTracked": true,
@@ -210,7 +211,7 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Circular",
     "status": "Effective",
     "appliesTo": [
-      "All regulated entities"
+      "All Banks"
     ],
     "summary": "In this connection, Ministry of External Affairs (MEA), Government of India has informed about the UNSC press release SC/16435, dated August 18, 2026 wherein the Security Council pursuant to resolutions 1267 (1999), 1989 (2011) and 2253 (2015) concerning ISIL (Da'esh), Al-Qaida and associated individuals, groups, undertakings and entities enacted the amendments specified with strikethrough and und",
     "firstTracked": true,
@@ -366,7 +367,10 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Circular",
     "status": "Effective",
     "appliesTo": [
-      "All regulated entities"
+      "Commercial Banks",
+      "Payments Banks",
+      "Small Finance Banks",
+      "Local Area Banks"
     ],
     "summary": "In this connection, Ministry of External Affairs (MEA), Government of India has informed about the UNSC press release SC/16432, dated August 13, 2026 wherein the Security Council pursuant to resolutions 1267 (1999), 1989 (2011) and 2253 (2015) concerning ISIL (Da'esh), Al.Qaida and associated individuals, groups, undertakings and entities enacted the amendments specified with strikethrough and und",
     "firstTracked": true,
@@ -456,7 +460,10 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Circular",
     "status": "Effective",
     "appliesTo": [
-      "All regulated entities"
+      "Commercial Banks",
+      "Payments Banks",
+      "Small Finance Banks",
+      "Local Area Banks"
     ],
     "summary": "In this connection, Ministry of External Affairs (MEA), Government of India has informed about the UNSC press release SC/16433, dated August 14, 2026 wherein the Security Council pursuant to resolutions 1267 (1999), 1989 (2011) and 2253 (2015) concerning ISIL (Da'esh), Al.Qaida and associated individuals, groups, undertakings and entities enacted the amendments specified with strikethrough and und",
     "firstTracked": true,
@@ -546,7 +553,7 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Circular",
     "status": "Effective",
     "appliesTo": [
-      "All regulated entities"
+      "Mutual Funds / AMCs"
     ],
     "summary": "Please refer to the Master Circular for Mutual Funds dated March 20, 2026 (\"Master Circular\") which, inter alia, prescribes the requirements relating to registration of Mutual Funds.",
     "firstTracked": true,
@@ -750,7 +757,8 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Circular",
     "status": "Effective",
     "appliesTo": [
-      "All regulated entities"
+      "SEBI Registered Intermediaries",
+      "IFSC Entities"
     ],
     "summary": "SEBI, vide notification dated November 09, 2022, prescribed a regulatory framework for entities operating or desirous of operating as OBPPs under Regulation 51A of the SEBI (Issue and Listing of Non-Convertible Securities) Regulations, 2021 (\"SEBI NCS Regulations\"). This framework was further streamlined through subsequent circulars to provide for registration, specify the permissible list of prod",
     "firstTracked": true,
@@ -1036,7 +1044,7 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Circular",
     "status": "Effective",
     "appliesTo": [
-      "All regulated entities"
+      "IFSC Entities"
     ],
     "summary": "Reference may be drawn to the International Financial Services Centres Authority (Fund Management) Regulations, 2025 (hereinafter referred to as \"FM Regulations\"), in particular regulation 80, which permits a Fund Management Entity, as part of its Portfolio Management Services, to also provide advisory services in compliance with the relevant provisions of the International Financial Services Cent",
     "firstTracked": true,
@@ -1102,7 +1110,7 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Circular",
     "status": "Effective",
     "appliesTo": [
-      "All regulated entities"
+      "IFSC Entities"
     ],
     "summary": "Reference is drawn to sub-regulation (6) of regulation 7 of the International Financial Services Centres Authority (Fund Management) Regulations, 2025 (\"FM Regulations\"), which empowers the Authority to specify certification courses for the employees of Fund Management Entities in the IFSC.",
     "firstTracked": true,
@@ -1184,7 +1192,7 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Circular",
     "status": "Effective",
     "appliesTo": [
-      "All regulated entities"
+      "IFSC Entities"
     ],
     "summary": "In this context, you may also be aware that - (a) an LoA remains valid either for a period of one (1) year in the case where the entity has not commenced the business, or for a period of five (5) years in the case where the entity has commenced the business, as the case may be, and that in terms of Rule 19 (6A) of the Special Economic Zones Rules, 2006, an application for renewal of the LoA is to ",
     "firstTracked": true,
@@ -1258,7 +1266,7 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Circular",
     "status": "Effective",
     "appliesTo": [
-      "Various Banks"
+      "All Banks"
     ],
     "summary": "Further, reference is also invited to the Reserve Bank of India (Cash Reserve Ratio and Statutory Liquidity Ratio) Second and Third Amendment Directions dated June 08, 2026 and June 19, 2026*, as applicable to various banks, wherein exemption has been provided from maintenance of Cash Reserve Ratio and Statutory Liquidity Ratio on fresh FCNR (B) deposits of minimum tenor of three years and maximum",
     "firstTracked": true,
@@ -1324,7 +1332,10 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Notification",
     "status": "Effective",
     "appliesTo": [
-      "Various Banks"
+      "Commercial Banks",
+      "Small Finance Banks",
+      "Local Area Banks",
+      "Regional Rural Banks"
     ],
     "summary": "These Directions shall come into effect on April 01, 2025 and shall supersede the earlier Directions on the subject, namely, the Reserve Bank of India (Priority Sector Lending - Targets and Classification) Directions, 2020 (Ref. FIDD.CO.Plan.BC.5/04.09.01/2020-21) dated September 04, 2020 (updated from time to time). All loans eligible to be categorised as Priority Sector Lending under the erstwhi",
     "firstTracked": true,
@@ -1638,7 +1649,7 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Circular",
     "status": "Effective",
     "appliesTo": [
-      "All regulated entities"
+      "IFSC Entities"
     ],
     "summary": "Reference is drawn to sub-regulation (5) of regulation 9 of the International Financial Services Centres Authority (Capital Market Intermediaries) Regulations, 2025 (\"CMI Regulations\"), which empowers the Authority to specify certification courses for the employees of Capital Market Intermediaries (\"CMIs\") in the IFSC.",
     "firstTracked": true,
@@ -1720,7 +1731,7 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Circular",
     "status": "Effective",
     "appliesTo": [
-      "Recovery Agency As Well As Recovery Agent Shall Apply To Such An Individual"
+      "All Banks"
     ],
     "summary": "In exercise of the powers conferred by Section 45L of the Reserve Bank of India Act, 1934, the Reserve Bank, being satisfied that it is necessary and expedient in public interest so to do, hereby issues the Amendment Directions hereinafter specified.",
     "firstTracked": true,
@@ -1778,7 +1789,7 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Circular",
     "status": "Effective",
     "appliesTo": [
-      "Recovery Agency As Well As Recovery Agent Shall Apply To Such An Individual"
+      "Commercial Banks"
     ],
     "summary": "In exercise of the powers conferred by Sections 21 and 35A of the Banking Regulation Act,1949, the Reserve Bank, being satisfied that it is necessary and expedient in public interest so to do, hereby issues the Amendment Directions hereinafter specified.",
     "firstTracked": true,
@@ -1836,7 +1847,8 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Circular",
     "status": "Effective",
     "appliesTo": [
-      "All regulated entities"
+      "NBFCs",
+      "Housing Finance Companies"
     ],
     "summary": "In exercise of the powers conferred by Section 30A of the National Housing Bank Act,1987, the Reserve Bank, being satisfied that it is necessary and expedient in public interest so to do, hereby issues the Amendment Directions hereinafter specified.",
     "firstTracked": true,
@@ -1894,7 +1906,7 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Circular",
     "status": "Effective",
     "appliesTo": [
-      "Recovery Agency As Well As Recovery Agent Shall Apply To Such An Individual"
+      "Local Area Banks"
     ],
     "summary": "In exercise of the powers conferred by Sections 21 and 35A of the Banking Regulation Act,1949, the Reserve Bank, being satisfied that it is necessary and expedient in public interest so to do, hereby issues the Amendment Directions hereinafter specified.",
     "firstTracked": true,
@@ -1952,7 +1964,7 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Circular",
     "status": "Effective",
     "appliesTo": [
-      "Recovery Agency As Well As Recovery Agent Shall Apply To Such An Individual"
+      "NBFCs"
     ],
     "summary": "In exercise of the powers conferred by Sections 45JA, 45L and 45M of the Reserve Bank of India Act, 1934, the Reserve Bank, being satisfied that it is necessary and expedient in public interest so to do, hereby issues the Amendment Directions hereinafter specified.",
     "firstTracked": true,
@@ -2010,7 +2022,7 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Circular",
     "status": "Effective",
     "appliesTo": [
-      "Recovery Agency As Well As Recovery Agent Shall Apply To Such An Individual"
+      "Regional Rural Banks"
     ],
     "summary": "In exercise of the powers conferred by Sections 21 and 35A of the Banking Regulation Act,1949, the Reserve Bank, being satisfied that it is necessary and expedient in public interest so to do, hereby issues the Amendment Directions hereinafter specified.",
     "firstTracked": true,
@@ -2068,7 +2080,7 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Circular",
     "status": "Effective",
     "appliesTo": [
-      "Recovery Agency As Well As Recovery Agent Shall Apply To Such An Individual"
+      "Cooperative Banks"
     ],
     "summary": "In exercise of the powers conferred by Sections 21, 35A and 56 of the Banking Regulation Act,1949, the Reserve Bank, being satisfied that it is necessary and expedient in public interest so to do, hereby issues the Amendment Directions hereinafter specified.",
     "firstTracked": true,
@@ -2126,7 +2138,7 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Circular",
     "status": "Effective",
     "appliesTo": [
-      "Recovery Agency As Well As Recovery Agent Shall Apply To Such An Individual"
+      "Small Finance Banks"
     ],
     "summary": "In exercise of the powers conferred by Sections 21 and 35A of the Banking Regulation Act,1949, the Reserve Bank, being satisfied that it is necessary and expedient in public interest so to do, hereby issues the Amendment Directions hereinafter specified.",
     "firstTracked": true,
@@ -2184,7 +2196,7 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Circular",
     "status": "Effective",
     "appliesTo": [
-      "Recovery Agency As Well As Recovery Agent Shall Apply To Such An Individual"
+      "Cooperative Banks"
     ],
     "summary": "In exercise of the powers conferred by Sections 21, 35A and 56 of the Banking Regulation Act, 1949, the Reserve Bank, being satisfied that it is necessary and expedient in public interest so to do, hereby issues the Amendment Directions hereinafter specified.",
     "firstTracked": true,
@@ -2242,7 +2254,7 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Circular",
     "status": "Effective",
     "appliesTo": [
-      "All regulated entities"
+      "All Banks"
     ],
     "summary": "The National Pension System (NPS) has been designed as an efficient, transparent and technologydriven retirement savings framework. As part of the Pension Fund Regulatory and Development Authority's (PFRDA) continuous endeavour to enhance subscriber experience and improve operational efficiency, various digital and process enhancements have been undertaken across the NPS intermediary architecture ",
     "firstTracked": true,
@@ -2398,7 +2410,7 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Notification",
     "status": "Effective",
     "appliesTo": [
-      "Them"
+      "All Banks"
     ],
     "summary": "These Directions shall be called the Reserve Bank of India (All India Financial Institutions - Cybersecurity, Technology : Risk, Resilience and Assurance Framework) Directions, 2026.",
     "firstTracked": true,
@@ -4248,7 +4260,7 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Notification",
     "status": "Effective",
     "appliesTo": [
-      "India Financial Institutions Stand Repealed, As Communicated Vide Circular No"
+      "All Banks"
     ],
     "summary": "These Directions shall be called the Reserve Bank of India (All India Financial Institutions - Fraud Risk Management) Directions, 2026.",
     "firstTracked": true,
@@ -4826,7 +4838,7 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Notification",
     "status": "Effective",
     "appliesTo": [
-      "India Financial Institutions Stand Repealed, As Communicated Vide Circular No"
+      "All Banks"
     ],
     "summary": "These Directions shall be called the Reserve Bank of India (All India Financial Institutions - Miscellaneous) Supervisory Directions, 2026.",
     "firstTracked": true,
@@ -4972,7 +4984,7 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Notification",
     "status": "Effective",
     "appliesTo": [
-      "India Financial Institutions Stand Repealed, As Communicated Vide Circular No"
+      "All Banks"
     ],
     "summary": "These Directions shall be called the Reserve Bank of India (All India Financial Institutions - Supervisory Returns) Directions, 2026.",
     "firstTracked": true,
@@ -5246,7 +5258,7 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Notification",
     "status": "Effective",
     "appliesTo": [
-      "Asset Reconstruction Companies Stand Repealed, As Communicated Vide Circular No"
+      "Asset Reconstruction Companies"
     ],
     "summary": "These Directions shall be called the Reserve Bank of India (Asset Reconstruction Companies - Supervisory Returns) Directions, 2026.",
     "firstTracked": true,
@@ -5520,7 +5532,10 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Notification",
     "status": "Effective",
     "appliesTo": [
-      "Its Banking Activities (Together, 'Compliance Laws, Rules, And Standards')"
+      "Commercial Banks",
+      "Payments Banks",
+      "Small Finance Banks",
+      "Local Area Banks"
     ],
     "summary": "These Directions shall be called the Reserve Bank of India (Commercial Banks - Compliance Function) Directions, 2026.",
     "firstTracked": true,
@@ -6186,7 +6201,10 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Notification",
     "status": "Effective",
     "appliesTo": [
-      "Commercial Banks Stand Repealed, As Communicated Vide Circular No"
+      "Commercial Banks",
+      "Payments Banks",
+      "Small Finance Banks",
+      "Local Area Banks"
     ],
     "summary": "These Directions shall be called the Reserve Bank of India (Commercial Banks - Concurrent Audit) Directions, 2026.",
     "firstTracked": true,
@@ -6452,7 +6470,10 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Notification",
     "status": "Effective",
     "appliesTo": [
-      "Them"
+      "Commercial Banks",
+      "Payments Banks",
+      "Small Finance Banks",
+      "Local Area Banks"
     ],
     "summary": "These Directions shall be called the Reserve Bank of India (Commercial Banks - Cybersecurity, Technology : Risk, Resilience and Assurance Framework) Directions, 2026.",
     "firstTracked": true,
@@ -8350,7 +8371,10 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Notification",
     "status": "Effective",
     "appliesTo": [
-      "The Bank In Its Capacity As Both Issuer And Acquirer"
+      "Commercial Banks",
+      "Payments Banks",
+      "Small Finance Banks",
+      "Local Area Banks"
     ],
     "summary": "These Directions shall be called the Reserve Bank of India (Commercial Banks - Digital Payment Security Controls) Directions, 2026.",
     "firstTracked": true,
@@ -8968,7 +8992,10 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Notification",
     "status": "Effective",
     "appliesTo": [
-      "Commercial Banks Stand Repealed, As Communicated Vide Circular No"
+      "Commercial Banks",
+      "Payments Banks",
+      "Small Finance Banks",
+      "Local Area Banks"
     ],
     "summary": "These Directions shall be called the Reserve Bank of India (Commercial Banks - Fraud Risk Management) Directions, 2026.",
     "firstTracked": true,
@@ -9562,7 +9589,10 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Notification",
     "status": "Effective",
     "appliesTo": [
-      "Commercial Banks Stand Repealed, As Communicated Vide Circular No"
+      "Commercial Banks",
+      "Payments Banks",
+      "Small Finance Banks",
+      "Local Area Banks"
     ],
     "summary": "These Directions shall be called the Reserve Bank of India (Commercial Banks - Internal Audit Function) Directions, 2026.",
     "firstTracked": true,
@@ -9924,7 +9954,10 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Notification",
     "status": "Effective",
     "appliesTo": [
-      "All regulated entities"
+      "Commercial Banks",
+      "Payments Banks",
+      "Small Finance Banks",
+      "Local Area Banks"
     ],
     "summary": "These Directions shall be called the Reserve Bank of India (Commercial Banks - Miscellaneous) Supervisory Directions, 2026.",
     "firstTracked": true,
@@ -10694,7 +10727,10 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Notification",
     "status": "Effective",
     "appliesTo": [
-      "Specialised Branches Is Enclosed As Annex Iv"
+      "Commercial Banks",
+      "Small Finance Banks",
+      "Local Area Banks",
+      "NBFCs"
     ],
     "summary": "These Directions shall be called the Reserve Bank of India (Commercial Banks - Statutory Audit) Directions, 2026.",
     "firstTracked": true,
@@ -11408,7 +11444,10 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Notification",
     "status": "Effective",
     "appliesTo": [
-      "All regulated entities"
+      "Commercial Banks",
+      "Small Finance Banks",
+      "Local Area Banks",
+      "Regional Rural Banks"
     ],
     "summary": "These Directions shall be called the Reserve Bank of India (Commercial Banks - Supervisory Returns) Directions, 2026.",
     "firstTracked": true,
@@ -11682,7 +11721,7 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Notification",
     "status": "Effective",
     "appliesTo": [
-      "Them"
+      "Credit Information Companies"
     ],
     "summary": "These Directions shall be called the Reserve Bank of India (Credit Information Companies - Cybersecurity, Technology : Risk, Resilience and Assurance Framework) Directions, 2026.",
     "firstTracked": true,
@@ -13532,7 +13571,7 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Notification",
     "status": "Effective",
     "appliesTo": [
-      "Credit Information Companies Stand Repealed, As Communicated Vide Circular No"
+      "Credit Information Companies"
     ],
     "summary": "These Directions shall be called the Reserve Bank of India (Credit Information Companies - Miscellaneous) Supervisory Directions, 2026.",
     "firstTracked": true,
@@ -13646,7 +13685,7 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Notification",
     "status": "Effective",
     "appliesTo": [
-      "Its Banking Activities (Together, 'Compliance Laws, Rules, And Standards')"
+      "Local Area Banks"
     ],
     "summary": "These Directions shall be called the Reserve Bank of India (Local Area Banks - Compliance Function) Directions, 2026.",
     "firstTracked": true,
@@ -14312,7 +14351,7 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Notification",
     "status": "Effective",
     "appliesTo": [
-      "Local Area Banks Stand Repealed, As Communicated Vide Circular No"
+      "Local Area Banks"
     ],
     "summary": "These Directions shall be called the Reserve Bank of India (Local Area Banks - Concurrent Audit) Directions, 2026.",
     "firstTracked": true,
@@ -14578,7 +14617,7 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Notification",
     "status": "Effective",
     "appliesTo": [
-      "Local Area Banks Stand Repealed, As Communicated Vide Circular No"
+      "Local Area Banks"
     ],
     "summary": "These Directions shall be called the Reserve Bank of India (Local Area Banks - Fraud Risk Management) Directions, 2026.",
     "firstTracked": true,
@@ -15156,7 +15195,7 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Notification",
     "status": "Effective",
     "appliesTo": [
-      "Local Area Banks Stand Repealed, As Communicated Vide Circular No"
+      "Local Area Banks"
     ],
     "summary": "These Directions shall be called the Reserve Bank of India (Local Area Banks - Internal Audit Function) Directions, 2026.",
     "firstTracked": true,
@@ -15526,7 +15565,7 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Notification",
     "status": "Effective",
     "appliesTo": [
-      "The Atm Switch Ecosystem With The Asps For Necessary Compliance"
+      "Local Area Banks"
     ],
     "summary": "These Directions shall be called the Reserve Bank of India (Local Area Banks - Miscellaneous) Supervisory Directions, 2026.",
     "firstTracked": true,
@@ -16552,7 +16591,10 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Notification",
     "status": "Effective",
     "appliesTo": [
-      "Specialised Branches Is Enclosed As Annex Iv"
+      "Commercial Banks",
+      "Small Finance Banks",
+      "Local Area Banks",
+      "NBFCs"
     ],
     "summary": "These Directions shall be called the Reserve Bank of India (Local Area Banks - Statutory Audit) Directions, 2026.",
     "firstTracked": true,
@@ -17202,7 +17244,7 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Notification",
     "status": "Effective",
     "appliesTo": [
-      "Local Area Banks Stand Repealed, As Communicated Vide Circular No"
+      "Local Area Banks"
     ],
     "summary": "These Directions shall be called the Reserve Bank of India (Local Area Banks - Supervisory Returns) Directions, 2026.",
     "firstTracked": true,
@@ -17468,7 +17510,9 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Notification",
     "status": "Effective",
     "appliesTo": [
-      "Non-Banking Financial Companies Stand Repealed, As Communicated Vide Circular No"
+      "NBFCs",
+      "Housing Finance Companies",
+      "Micro Finance Institutions"
     ],
     "summary": "These Directions shall be called the Reserve Bank of India (Non-Banking Financial Companies - Auditor's Report) Directions, 2026.",
     "firstTracked": true,
@@ -17630,7 +17674,7 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Notification",
     "status": "Effective",
     "appliesTo": [
-      "Its Activities"
+      "NBFCs"
     ],
     "summary": "These Directions shall be called the Reserve Bank of India (Non-Banking Financial Companies - Compliance Function) Directions, 2026.",
     "firstTracked": true,
@@ -17960,7 +18004,7 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Notification",
     "status": "Effective",
     "appliesTo": [
-      "Them"
+      "NBFCs"
     ],
     "summary": "These Directions shall be called the Reserve Bank of India (Non-Banking Financial Companies - Cybersecurity, Technology : Risk, Resilience and Assurance Framework) Directions, 2026.",
     "firstTracked": true,
@@ -19258,7 +19302,7 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Notification",
     "status": "Effective",
     "appliesTo": [
-      "Non-Banking Financial Companies Stand Repealed, As Communicated Vide Circular No"
+      "NBFCs"
     ],
     "summary": "These Directions shall be called the Reserve Bank of India (Non-Banking Financial Companies - Digital Payment Security Controls) Directions, 2026.",
     "firstTracked": true,
@@ -19876,7 +19920,9 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Notification",
     "status": "Effective",
     "appliesTo": [
-      "Housing Finance Companies"
+      "NBFCs",
+      "Housing Finance Companies",
+      "Asset Reconstruction Companies"
     ],
     "summary": "These Directions shall be called the Reserve Bank of India (Non-Banking Financial Companies - Fraud Risk Management) Directions, 2026.",
     "firstTracked": true,
@@ -20406,7 +20452,8 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Notification",
     "status": "Effective",
     "appliesTo": [
-      "Non-Banking Financial Companies Stand Repealed, As Communicated Vide Circular No"
+      "NBFCs",
+      "Housing Finance Companies"
     ],
     "summary": "These Directions shall be called the Reserve Bank of India (Non-Banking Financial Companies - Internal Audit Function) Directions, 2026.",
     "firstTracked": true,
@@ -20816,7 +20863,9 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Notification",
     "status": "Effective",
     "appliesTo": [
-      "Housing Finance Companies And Micro Finance Institutions"
+      "NBFCs",
+      "Housing Finance Companies",
+      "Micro Finance Institutions"
     ],
     "summary": "These Directions shall be called the Reserve Bank of India (Non-Banking Financial Companies - Miscellaneous) Supervisory Directions, 2026.",
     "firstTracked": true,
@@ -21050,7 +21099,10 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Notification",
     "status": "Effective",
     "appliesTo": [
-      "All regulated entities"
+      "Commercial Banks",
+      "Small Finance Banks",
+      "Local Area Banks",
+      "NBFCs"
     ],
     "summary": "These Directions shall be called the Reserve Bank of India (Non-Banking Financial Companies - Statutory Audit) Directions, 2026.",
     "firstTracked": true,
@@ -21356,7 +21408,8 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Notification",
     "status": "Effective",
     "appliesTo": [
-      "Non-Banking Financial Companies Stand Repealed, As Communicated Vide Circular No"
+      "NBFCs",
+      "Housing Finance Companies"
     ],
     "summary": "These Directions shall be called the Reserve Bank of India (Non-Banking Financial Companies - Supervisory Returns) Directions, 2026.",
     "firstTracked": true,
@@ -21630,7 +21683,7 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Notification",
     "status": "Effective",
     "appliesTo": [
-      "Its Banking Activities (Together, 'Compliance Laws, Rules, And Standards')"
+      "Payments Banks"
     ],
     "summary": "These Directions shall be called the Reserve Bank of India (Payments Banks - Compliance Function) Directions, 2026.",
     "firstTracked": true,
@@ -22296,7 +22349,7 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Notification",
     "status": "Effective",
     "appliesTo": [
-      "Payments Banks Stand Repealed, As Communicated Vide Circular No"
+      "Payments Banks"
     ],
     "summary": "These Directions shall be called the Reserve Bank of India (Payments Banks - Concurrent Audit) Supervisory Directions, 2026.",
     "firstTracked": true,
@@ -22562,7 +22615,7 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Notification",
     "status": "Effective",
     "appliesTo": [
-      "Them"
+      "Payments Banks"
     ],
     "summary": "These Directions shall be called the Reserve Bank of India (Payments Banks - Cybersecurity, Technology : Risk, Resilience and Assurance Framework) Directions, 2026.",
     "firstTracked": true,
@@ -24452,7 +24505,7 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Notification",
     "status": "Effective",
     "appliesTo": [
-      "The Bank In Its Capacity As Both Issuer And Acquirer"
+      "Payments Banks"
     ],
     "summary": "These Directions shall be called the Reserve Bank of India (Payments Banks - Digital Payment Security Controls) Supervisory Directions, 2026.",
     "firstTracked": true,
@@ -25070,7 +25123,7 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Notification",
     "status": "Effective",
     "appliesTo": [
-      "Payments Banks Stand Repealed, As Communicated Vide Circular No"
+      "Payments Banks"
     ],
     "summary": "These Directions shall be called the Reserve Bank of India (Payments Banks - Fraud Risk Management) Directions, 2026.",
     "firstTracked": true,
@@ -25504,7 +25557,7 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Notification",
     "status": "Effective",
     "appliesTo": [
-      "Payments Banks Stand Repealed, As Communicated Vide Circular No"
+      "Payments Banks"
     ],
     "summary": "These Directions shall be called the Reserve Bank of India (Payments Banks - Internal Audit Function) Directions, 2026.",
     "firstTracked": true,
@@ -25874,7 +25927,7 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Notification",
     "status": "Effective",
     "appliesTo": [
-      "Payments Banks Stand Repealed, As Communicated Vide Circular No"
+      "Payments Banks"
     ],
     "summary": "These Directions shall be called the Reserve Bank of India (Payments Banks - Miscellaneous) Supervisory Directions, 2026.",
     "firstTracked": true,
@@ -26492,7 +26545,10 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Notification",
     "status": "Effective",
     "appliesTo": [
-      "Dos, Rbi Before 31St July Of The Reference Year"
+      "Commercial Banks",
+      "Payments Banks",
+      "Small Finance Banks",
+      "Local Area Banks"
     ],
     "summary": "These Directions shall be called the Reserve Bank of India (Payments Banks - Statutory Audit) Directions, 2026.",
     "firstTracked": true,
@@ -27094,7 +27150,7 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Notification",
     "status": "Effective",
     "appliesTo": [
-      "Payments Banks Stand Repealed, As Communicated Vide Circular No"
+      "Payments Banks"
     ],
     "summary": "These Directions shall be called the Reserve Bank of India (Payments Banks - Supervisory Returns) Directions, 2026.",
     "firstTracked": true,
@@ -27368,7 +27424,7 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Notification",
     "status": "Effective",
     "appliesTo": [
-      "Regional Rural Banks Stand Repealed, As Communicated Vide Circular No"
+      "Regional Rural Banks"
     ],
     "summary": "These Directions shall be called the Reserve Bank of India (Regional Rural Banks - Fraud Risk Management) Directions, 2026.",
     "firstTracked": true,
@@ -27842,7 +27898,7 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Notification",
     "status": "Effective",
     "appliesTo": [
-      "Regional Rural Banks Stand Repealed, As Communicated Vide Circular No"
+      "Regional Rural Banks"
     ],
     "summary": "These Directions shall be called the Reserve Bank of India (Regional Rural Banks - Miscellaneous) Supervisory Directions, 2026.",
     "firstTracked": true,
@@ -27972,7 +28028,7 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Notification",
     "status": "Effective",
     "appliesTo": [
-      "Rural Cooperative Banks Stand Repealed, As Communicated Vide Circular No"
+      "Cooperative Banks"
     ],
     "summary": "These Directions shall be called the Reserve Bank of India (Rural Co-operative Banks - Fraud Risk Management) Directions, 2026.",
     "firstTracked": true,
@@ -28414,7 +28470,7 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Notification",
     "status": "Effective",
     "appliesTo": [
-      "Rural Co-Operative Banks Stand Repealed, As Communicated Vide Circular No"
+      "Cooperative Banks"
     ],
     "summary": "These Directions shall be called the Reserve Bank of India (Rural Co-operative Banks - Miscellaneous) Supervisory Directions, 2026.",
     "firstTracked": true,
@@ -28536,7 +28592,7 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Notification",
     "status": "Effective",
     "appliesTo": [
-      "Rural Co-Operative Banks Stands Repealed, As Communicated Vide Circular No"
+      "Cooperative Banks"
     ],
     "summary": "These Directions shall be called the Reserve Bank of India (Rural Co-operative Banks - Statutory Audit) Directions, 2026.",
     "firstTracked": true,
@@ -28810,7 +28866,7 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Notification",
     "status": "Effective",
     "appliesTo": [
-      "Its Banking Activities (Together, 'Compliance Laws, Rules, And Standards')"
+      "Small Finance Banks"
     ],
     "summary": "These Directions shall be called the Reserve Bank of India (Small Finance Banks - Compliance Function) Directions, 2026.",
     "firstTracked": true,
@@ -29476,7 +29532,7 @@ export const kmtCirculars: Circular[] = [
     "instrumentType": "Notification",
     "status": "Effective",
     "appliesTo": [
-      "Small Finance Banks Stand Repealed, As Communicated Vide Circular No"
+      "Small Finance Banks"
     ],
     "summary": "These Directions shall be called the Reserve Bank of India (Small Finance Banks - Concurrent Audit) Directions, 2026.",
     "firstTracked": true,
