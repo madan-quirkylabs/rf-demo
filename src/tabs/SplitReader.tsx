@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import type { Circular, Clarification, SourceClause } from '../data/types';
 import { CHANGE_META } from './changeMeta';
-import { DiffText } from './paraDiff';
+import { DiffText, diffWords } from './paraDiff';
 
 const CATEGORY_LABEL: Record<string, string> = {
   reporting: 'Reporting',
@@ -66,9 +66,10 @@ export function SplitReader({
     return [...base, ...asked.filter((q) => q.clauseRef === selected.ref)];
   }, [c, selected, asked]);
 
-  /** The finale: the full circular, clause-by-clause, verbatim included. */
+  /** The finale: the full circular as an Excel file. Rich formatting via an
+   * HTML table (.xls) so the Diff column keeps Devesh's track-changes view:
+   * additions bold-green, deletions struck-through red. */
   const downloadExcel = () => {
-    const esc = (v: string) => `"${v.replace(/"/g, '""')}"`;
     const deadline = (d: (typeof c.checklist)[number]['deadline']) =>
       d.kind === 'periodic'
         ? `Recurring — ${d.frequency}`
@@ -77,33 +78,50 @@ export function SplitReader({
           : d.kind === 'fixed'
             ? `By ${d.date}`
             : d.note;
-    const lines = [
-      ['Para', 'Circular Text (verbatim)', 'Category', 'Action Item', 'Applies To', 'Deadline', 'Expected Evidence']
-        .map(esc)
-        .join(','),
-      // One row per checklist item; paras without items still export verbatim.
-      ...c.clauses.flatMap((cl) => {
+
+    const h = (v: string) =>
+      v.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+    /** Track-changes cell: LCS word diff rendered with Excel-safe markup. */
+    const diffCell = (cl: SourceClause) => {
+      if (!cl.previousText) return h(cl.text);
+      return diffWords(cl.previousText, cl.text)
+        .map((s) =>
+          s.kind === 'add'
+            ? `<b style="color:#0a6b2d">${h(s.text)}</b>`
+            : s.kind === 'del'
+              ? `<s style="color:#b3261e">${h(s.text)}</s>`
+              : h(s.text)
+        )
+        .join('');
+    };
+
+    const rows = c.clauses
+      .flatMap((cl) => {
         const items = c.checklist.filter((i) => baseRef(i.ref) === baseRef(cl.ref));
-        const rows = items.length > 0 ? items : [null];
-        return rows.map((i) =>
-          [
-            cl.ref,
-            cl.text,
-            i ? (CATEGORY_LABEL[i.category] ?? i.category) : '',
-            i ? i.action : '',
-            i ? i.appliesTo.join('; ') : '',
-            i ? deadline(i.deadline) : '',
-            i ? i.evidenceExpected : '',
-          ]
-            .map((v) => esc(String(v)))
-            .join(',')
-        );
-      }),
-    ];
-    const blob = new Blob([lines.join('\n')], { type: 'text/csv;charset=utf-8;' });
+        return (items.length > 0 ? items : [null]).map((i) => ({ cl, i }));
+      })
+      .map(
+        ({ cl, i }) =>
+          `<tr><td>${h(cl.ref)}</td><td>${h(cl.previousText ?? '')}</td><td>${h(cl.text)}</td><td>${diffCell(cl)}</td>` +
+          `<td>${i ? h(CATEGORY_LABEL[i.category] ?? i.category) : ''}</td>` +
+          `<td>${i ? h(i.action) : ''}</td>` +
+          `<td>${i ? h(i.appliesTo.join('; ')) : ''}</td>` +
+          `<td>${i ? h(deadline(i.deadline)) : ''}</td>` +
+          `<td>${i ? h(i.evidenceExpected) : ''}</td></tr>`
+      )
+      .join('');
+
+    const html =
+      `<html xmlns:x="urn:schemas-microsoft-com:office:excel"><head><meta charset="utf-8"></head><body>` +
+      `<table border="1"><tr>${['Para', 'Previous Verbatim', 'New Verbatim', 'Diff (− removed · + added)', 'Category', 'Action Item', 'Applies To', 'Deadline', 'Expected Evidence']
+        .map((t) => `<th style="background:#e8eef7">${t}</th>`)
+        .join('')}</tr>${rows}</table></body></html>`;
+
+    const blob = new Blob([html], { type: 'application/vnd.ms-excel;charset=utf-8;' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
-    a.download = `RF_Checklist_${c.regulator}_${c.refNo.replace(/[^\w-]/g, '')}.csv`;
+    a.download = `RF_${c.regulator}_${c.refNo.replace(/[^\w-]/g, '')}.xls`;
     a.click();
     URL.revokeObjectURL(a.href);
   };
