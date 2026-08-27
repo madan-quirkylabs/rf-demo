@@ -53,12 +53,32 @@ function DiffText({ text, previous }: { text: string; previous?: string }) {
  * for the selected para — old circular vs. new circular, and the checklist
  * rows derived from it. Nothing is hidden; the para list is always complete.
  */
-export function SplitReader({ circular: c }: { circular: Circular }) {
-  const [selectedId, setSelectedId] = useState<string>(c.clauses[0]?.id ?? '');
-  const selected = c.clauses.find((cl) => cl.id === selectedId) ?? c.clauses[0];
+export function SplitReader({
+  circular: c,
+  highlightsOnly = false,
+}: {
+  circular: Circular;
+  /** Highlights mode: only paras that moved, with partner commentary attached. */
+  highlightsOnly?: boolean;
+}) {
+  const clauses = useMemo(
+    () => (highlightsOnly ? c.clauses.filter((cl) => cl.changeType !== 'unchanged') : c.clauses),
+    [c, highlightsOnly]
+  );
+  const [selectedId, setSelectedId] = useState<string>(clauses[0]?.id ?? '');
+  const selected = clauses.find((cl) => cl.id === selectedId) ?? clauses[0];
   const paraChecklist = selected
     ? c.checklist.filter((i) => baseRef(i.ref) === baseRef(selected.ref))
     : [];
+
+  /** Commentary is pinned by para number, so "Paras 61, 67" matches Para 61. */
+  const paraCommentary = useMemo(() => {
+    if (!selected) return [];
+    const n = Number(baseRef(selected.ref).replace(/\D+/g, ''));
+    return c.commentary.filter((co) =>
+      (co.clauseRef.match(/\d+/g) ?? []).map(Number).includes(n)
+    );
+  }, [c, selected]);
 
   /** The finale: the full checklist, clause-by-clause, verbatim included. */
   const downloadExcel = () => {
@@ -109,10 +129,12 @@ export function SplitReader({ circular: c }: { circular: Circular }) {
             {CHANGE_META[k].label}
           </span>
         ))}
-        <span className="ml-auto flex items-center gap-3">
+          <span className="ml-auto flex items-center gap-3">
           <span className="text-[11px] text-on-surface-variant inline-flex items-center gap-1">
             <span className="material-symbols-outlined text-[14px]">verified</span>
-            {c.clauses.length} paras · all shown · verbatim from source
+            {highlightsOnly
+              ? `${clauses.length} of ${c.clauses.length} paras moved — see all in Read circular`
+              : `${clauses.length} paras · all shown · verbatim from source`}
           </span>
           <button
             onClick={downloadExcel}
@@ -133,7 +155,7 @@ export function SplitReader({ circular: c }: { circular: Circular }) {
             <h3 className="text-[12px] font-semibold">Circular — verbatim, clause by clause</h3>
           </div>
           <div className="max-h-[68vh] overflow-y-auto divide-y divide-outline-variant/10">
-            {c.clauses.map((cl) => (
+            {clauses.map((cl) => (
               <ParaCard
                 key={cl.id}
                 clause={cl}
@@ -206,6 +228,41 @@ export function SplitReader({ circular: c }: { circular: Circular }) {
                         <li key={i.id} className="text-[12.5px] leading-snug flex gap-2">
                           <span className="font-mono text-[11px] text-primary shrink-0 mt-[2px]">{i.ref}</span>
                           <span>{i.action}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+
+                {/* Partner commentary pinned to this para */}
+                <div className="rounded-lg border border-tertiary/30 bg-tertiary/[0.04] p-3.5">
+                  <p className="text-[10px] font-semibold uppercase tracking-wider text-tertiary mb-2 flex items-center gap-1">
+                    <span className="material-symbols-outlined text-[13px]">record_voice_over</span>
+                    Partner commentary on this para
+                  </p>
+                  {paraCommentary.length === 0 ? (
+                    <p className="text-[12px] italic text-on-surface-variant">
+                      No partner commentary cites this para yet.
+                    </p>
+                  ) : (
+                    <ul className="space-y-3">
+                      {paraCommentary.map((co) => (
+                        <li key={co.id} className="text-[12.5px] leading-relaxed">
+                          <p className="flex items-center gap-2 mb-1 flex-wrap">
+                            <span className="font-semibold">{co.author}</span>
+                            <span className="text-[11px] text-on-surface-variant">{co.publishedAt}</span>
+                            {co.official && (
+                              <span className="text-[9px] px-1.5 py-[1px] rounded bg-tertiary/15 text-tertiary font-semibold uppercase tracking-wide border border-tertiary/30">
+                                Official
+                              </span>
+                            )}
+                          </p>
+                          <p className="text-on-surface">{co.text}</p>
+                          {co.sourceUrl && (
+                            <a href={co.sourceUrl} target="_blank" rel="noreferrer" className="text-[11px] text-primary hover:underline mt-1 inline-block">
+                              View official source ↗
+                            </a>
+                          )}
                         </li>
                       ))}
                     </ul>

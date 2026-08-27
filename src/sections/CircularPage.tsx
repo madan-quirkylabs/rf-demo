@@ -3,16 +3,15 @@ import type { Circular } from '../data/types';
 import { HeroSection } from './HeroSection';
 import { CommentarySection } from './CommentarySection';
 import { ClarificationsSection } from './ClarificationsSection';
-import { ChangeTab } from '../tabs/ChangeTab';
 import { SplitReader } from '../tabs/SplitReader';
 import type { CircularLens } from './IndexPage';
 
 type TopTab = 'circular' | 'clarify';
-type Lens = 'read' | 'change';
+type Lens = 'read' | 'highlights';
 
 const LENSES: { id: Lens; label: string; icon: string }[] = [
   { id: 'read', label: 'Read circular', icon: 'menu_book' },
-  { id: 'change', label: 'What Changed', icon: 'difference' },
+  { id: 'highlights', label: 'Highlights & Commentaries', icon: 'auto_awesome' },
 ];
 
 /**
@@ -99,8 +98,10 @@ export function CircularPage({
               ))}
             </div>
             <div className="px-2 pb-2">
-              {lens === 'read' && <SplitReader key={c.id} circular={c} />}
-              {lens === 'change' && <ChangeTab circular={c} />}
+              {lens === 'read' && <SplitReader key={`read-${c.id}`} circular={c} />}
+              {lens === 'highlights' && (
+                <SplitReader key={`hi-${c.id}`} circular={c} highlightsOnly />
+              )}
             </div>
           </>
         )}
