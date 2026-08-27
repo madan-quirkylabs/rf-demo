@@ -66,11 +66,9 @@ export function SplitReader({
     return [...base, ...asked.filter((q) => q.clauseRef === selected.ref)];
   }, [c, selected, asked]);
 
-  /** The finale: the full checklist, clause-by-clause, verbatim included. */
+  /** The finale: the full circular, clause-by-clause, verbatim included. */
   const downloadExcel = () => {
     const esc = (v: string) => `"${v.replace(/"/g, '""')}"`;
-    const clauseText = (ref: string) =>
-      c.clauses.find((cl) => baseRef(cl.ref) === baseRef(ref))?.text ?? '';
     const deadline = (d: (typeof c.checklist)[number]['deadline']) =>
       d.kind === 'periodic'
         ? `Recurring — ${d.frequency}`
@@ -83,19 +81,24 @@ export function SplitReader({
       ['Para', 'Circular Text (verbatim)', 'Category', 'Action Item', 'Applies To', 'Deadline', 'Expected Evidence']
         .map(esc)
         .join(','),
-      ...c.checklist.map((i) =>
-        [
-          i.ref,
-          clauseText(i.ref),
-          CATEGORY_LABEL[i.category] ?? i.category,
-          i.action,
-          i.appliesTo.join('; '),
-          deadline(i.deadline),
-          i.evidenceExpected,
-        ]
-          .map((v) => esc(String(v)))
-          .join(',')
-      ),
+      // One row per checklist item; paras without items still export verbatim.
+      ...c.clauses.flatMap((cl) => {
+        const items = c.checklist.filter((i) => baseRef(i.ref) === baseRef(cl.ref));
+        const rows = items.length > 0 ? items : [null];
+        return rows.map((i) =>
+          [
+            cl.ref,
+            cl.text,
+            i ? (CATEGORY_LABEL[i.category] ?? i.category) : '',
+            i ? i.action : '',
+            i ? i.appliesTo.join('; ') : '',
+            i ? deadline(i.deadline) : '',
+            i ? i.evidenceExpected : '',
+          ]
+            .map((v) => esc(String(v)))
+            .join(',')
+        );
+      }),
     ];
     const blob = new Blob([lines.join('\n')], { type: 'text/csv;charset=utf-8;' });
     const a = document.createElement('a');
@@ -202,7 +205,12 @@ export function SplitReader({
                     <span className="material-symbols-outlined text-[13px]">checklist</span>
                     Checklist from this para
                   </p>
-                  {paraChecklist.length === 0 ? (
+                  {paraChecklist.length === 0 && c.checklist.length === 0 ? (
+                    <p className="text-[12px] italic text-on-surface-variant">
+                      Checklist derivation is pending for this circular — every para above is
+                      verbatim from the source; nothing is interpreted yet.
+                    </p>
+                  ) : paraChecklist.length === 0 ? (
                     <p className="text-[12px] italic text-on-surface-variant">
                       No action items derived from this para (information-only).
                     </p>

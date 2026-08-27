@@ -1,13 +1,11 @@
 import type { Circular } from './types';
-import { sebiSIDCircular } from './circular';
-import { rbiComplianceDirections } from './rbiCircular';
+import { kmtCirculars } from './generated/kmt';
 
 /**
- * All demo circulars. Adding a new regulator = add one dataset file that
- * satisfies the `Circular` type; nothing else needs to change.
+ * The comprehension-test build: real circulars only, generated from the KMT
+ * corpus by scripts/ingest_kmt.py (last 30 days of available data). No
+ * hand-authored datasets — commentary/checklists are empty rather than fake.
  */
-export const circulars: Circular[] = [sebiSIDCircular, rbiComplianceDirections];
+export const circulars: Circular[] = kmtCirculars;
 
 export type { Circular, Commentary, Clarification } from './types';
-export { sebiSIDCircular } from './circular';
-export { rbiComplianceDirections } from './rbiCircular';

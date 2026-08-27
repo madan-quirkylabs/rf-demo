@@ -7,6 +7,29 @@ import { Card, CardHeader } from '../components/ui';
  * Highlights & Commentaries lens; the para-level drill-down follows below.
  */
 export function ChangeSummary({ circular: c }: { circular: Circular }) {
+  // First-tracked circulars: the corpus has no prior instrument — no diff claims.
+  if (c.changeDiff.previous.length === 0 && c.changeDiff.current.length === 0) {
+    return (
+      <div className="py-5">
+        <Card>
+          <div className="p-5 flex items-start gap-3">
+            <span className="material-symbols-outlined text-on-surface-variant mt-0.5">flag</span>
+            <div>
+              <p className="text-[12px] font-semibold uppercase tracking-wider text-on-surface-variant mb-1">
+                First tracked version
+              </p>
+              <p className="text-[13px] leading-relaxed text-on-surface-variant">
+                Tracking of this instrument starts here — there is no prior version in the corpus
+                to diff against. Per-para change highlighting (additions in green, removals struck
+                through) begins with the next amendment to this circular.
+              </p>
+            </div>
+          </div>
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <div className="py-5 space-y-4">
       {/* Previous vs Current */}

@@ -148,6 +148,8 @@ export interface Circular {
   regulator: string;
   instrumentType: 'Circular' | 'Master Circular' | 'Notification';
   status: 'Effective' | 'Superseded' | 'Draft';
+  /** True when the corpus has no prior version — per-para diff is not claimed. */
+  firstTracked?: boolean;
   /** Regulated entity categories this instrument applies to (applicability). */
   appliesTo: string[];
   summary: string;
